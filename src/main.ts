@@ -75,9 +75,13 @@ scene.add(chunkMesh4)
 
 // Render loop
 function animate() {
+  stats.begin()
+
   requestAnimationFrame(animate)
 
   renderer.render(scene, camera)
+
+  stats.end()
 }
 
 // Handle window resize

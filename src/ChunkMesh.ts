@@ -18,7 +18,7 @@ export class ChunkMesh {
           let opacity = 1.0
 
           if (block.type === BlockType.Dirt) color = 0x8b4513
-          if (block.type === BlockType.Grass) color = 0xff0000
+          if (block.type === BlockType.Grass) color = 0x12cc2b
           if (block.type === BlockType.Stone) color = 0x888888
 
           const geometry = new THREE.BoxGeometry(1, 1, 1)
