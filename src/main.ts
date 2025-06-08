@@ -24,7 +24,7 @@ document.body.appendChild(stats.dom)
 // Camera setup
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight)
 camera.position.set(32, 32, 32)
-camera.lookAt(8, 8, 8)
+// camera.lookAt(32, 32, 32)
 
 // Controls setup
 const controls = new OrbitControls(camera, renderer.domElement)
@@ -48,30 +48,9 @@ function setupLights() {
 
 // Initialize and generate two chunks
 const chunk1 = new Chunk()
-const chunk2 = new Chunk()
-const chunk3 = new Chunk()
-const chunk4 = new Chunk()
-
-// Generate terrain for both chunks
-Terrain.generate(chunk1, 0, 0, 0.05, 3, 5)
-Terrain.generate(chunk2, 1, 0, 0.05, 3, 5)
-Terrain.generate(chunk3, 1, 1, 0.05, 3, 5)
-Terrain.generate(chunk4, 1, -1, 0.05, 3, 5)
-
-// Render the chunks as meshes
+Terrain.generate(chunk1, 0, 0, 0.05, 3, 10)
 const chunkMesh1 = ChunkMesh.fromChunk(chunk1)
-const chunkMesh2 = ChunkMesh.fromChunk(chunk2)
-const chunkMesh3 = ChunkMesh.fromChunk(chunk3)
-const chunkMesh4 = ChunkMesh.fromChunk(chunk4)
-
 scene.add(chunkMesh1)
-chunkMesh2.position.x += Chunk.SIZE // Offset the second chunk to the right
-scene.add(chunkMesh2)
-chunkMesh3.position.z += Chunk.SIZE // Offset the third chunk to the back
-scene.add(chunkMesh3)
-chunkMesh4.position.x += Chunk.SIZE // Offset the fourth chunk to the right
-chunkMesh4.position.z += Chunk.SIZE // Offset the fourth chunk to the back
-scene.add(chunkMesh4)
 
 // Render loop
 function animate() {

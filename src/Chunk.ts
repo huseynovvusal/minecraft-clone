@@ -2,7 +2,7 @@ import { Terrain } from "./Terrain"
 import { BlockType, type Block } from "./types/block"
 
 export class Chunk {
-  static SIZE = 8
+  static SIZE = 64
   private blocks: Block[][][] = []
 
   constructor() {
