@@ -172,7 +172,7 @@ export class ChunkMesh {
         )
         edgeGeometry.setIndex(geometryData.edgeIndices)
 
-        const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x505050, linewidth: 2 })
+        const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x303030, linewidth: 2 })
         const edgeMesh = new THREE.LineSegments(edgeGeometry, edgeMaterial)
         group.add(edgeMesh)
       }
