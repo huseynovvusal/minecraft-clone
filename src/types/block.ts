@@ -5,7 +5,8 @@ export enum BlockType {
   Stone,
 }
 
-export interface Block {
+export interface IBlock {
   id: number
   type: BlockType
+  isSolid: boolean
 }

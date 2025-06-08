@@ -1,6 +1,6 @@
 import { SimplexNoise } from "three/examples/jsm/Addons.js"
 import { Chunk } from "./Chunk"
-import { BlockType } from "./types/block"
+import { AirBlock, DirtBlock, GrassBlock, StoneBlock } from "./Block"
 
 export class Terrain {
   private static noise = new SimplexNoise()
@@ -23,11 +23,15 @@ export class Terrain {
 
         for (let y = 0; y < Chunk.SIZE; y++) {
           if (y < height - 1) {
-            chunk.setBlock(x, y, z, { id: 1, type: BlockType.Dirt })
+            if (y < height * 0.75 && Math.random() < 1 - y / height) {
+              chunk.setBlock(x, y, z, new StoneBlock(3))
+            } else {
+              chunk.setBlock(x, y, z, new DirtBlock(1))
+            }
           } else if (y === height - 1) {
-            chunk.setBlock(x, y, z, { id: 2, type: BlockType.Grass })
+            chunk.setBlock(x, y, z, new GrassBlock(2))
           } else {
-            chunk.setBlock(x, y, z, { id: 0, type: BlockType.Air })
+            chunk.setBlock(x, y, z, new AirBlock())
           }
         }
       }

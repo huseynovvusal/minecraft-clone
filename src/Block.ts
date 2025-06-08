@@ -1,15 +1,9 @@
-import * as THREE from "three"
-
 import { BlockType } from "./types/block"
 
-class Block {
+export class Block {
   static SIZE = 1
 
-  constructor(
-    private readonly id: number,
-    private readonly type: BlockType,
-    public isSolid: boolean = true
-  ) {}
+  constructor(readonly id: number, readonly type: BlockType, public isSolid: boolean = true) {}
 }
 
 export class GrassBlock extends Block {

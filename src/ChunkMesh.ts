@@ -60,7 +60,7 @@ export class ChunkMesh {
       if (x < 0 || x >= Chunk.SIZE || y < 0 || y >= Chunk.SIZE || z < 0 || z >= Chunk.SIZE) {
         return false // Consider out of bounds as "not solid" for rendering purposes
       }
-      return chunk.getBlock(x, y, z).type !== BlockType.Air
+      return chunk.getBlock(x, y, z).isSolid
     }
 
     for (let x = 0; x < Chunk.SIZE; x++) {

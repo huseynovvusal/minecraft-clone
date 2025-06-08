@@ -1,5 +1,5 @@
+import { AirBlock, type Block } from "./Block"
 import { Terrain } from "./Terrain"
-import { BlockType, type Block } from "./types/block"
 
 export class Chunk {
   static SIZE = 64
@@ -16,10 +16,7 @@ export class Chunk {
       for (let y = 0; y < Chunk.SIZE; y++) {
         this.blocks[x][y] = []
         for (let z = 0; z < Chunk.SIZE; z++) {
-          this.blocks[x][y][z] = {
-            id: 0,
-            type: BlockType.Air,
-          }
+          this.blocks[x][y][z] = new AirBlock()
         }
       }
     }
