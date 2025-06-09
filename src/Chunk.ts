@@ -5,7 +5,7 @@ import { Terrain } from "./Terrain"
 import { BlockType } from "./types/block"
 
 export class Chunk extends THREE.Group {
-  static SIZE = 16
+  static SIZE = 32
   private blocks: Block[][][] = []
 
   public params = {

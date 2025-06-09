@@ -23,11 +23,7 @@ export class Terrain {
 
         for (let y = 0; y < Chunk.SIZE; y++) {
           if (y < height - 1) {
-            if (y < height * 0.75 && Math.random() < 1 - y / height) {
-              chunk.setBlock(x, y, z, new StoneBlock(3))
-            } else {
-              chunk.setBlock(x, y, z, new DirtBlock(1))
-            }
+            chunk.setBlock(x, y, z, new DirtBlock(1))
           } else if (y === height - 1) {
             chunk.setBlock(x, y, z, new GrassBlock(2))
           } else {
