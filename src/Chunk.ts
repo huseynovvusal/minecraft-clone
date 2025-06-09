@@ -5,7 +5,7 @@ import { Terrain } from "@/Terrain"
 import { BlockType } from "@/types/block"
 
 export class Chunk extends THREE.Group {
-  static SIZE = 64
+  static SIZE = 16
   private blocks: Block[][][] = []
 
   public params = {
@@ -94,23 +94,49 @@ export class Chunk extends THREE.Group {
   private generateMeshes(): void {
     this.clear() // Clear previous meshes if any
 
-    const group = new THREE.Group()
+    const blockTypeToPositions: Record<BlockType, THREE.Vector3[]> = {
+      [BlockType.Grass]: [],
+      [BlockType.Dirt]: [],
+      [BlockType.Stone]: [],
+      [BlockType.Air]: [],
+    }
 
+    // Initialize positions for each block type
     for (let x = 0; x < Chunk.SIZE; x++) {
       for (let y = 0; y < Chunk.SIZE; y++) {
         for (let z = 0; z < Chunk.SIZE; z++) {
-          const block = this.getBlock(x, y, z)
-
-          // Skip blocks that are completely surrounded (not visible)
           if (!this.isBlockVisible(x, y, z)) continue
 
-          block.position.set(x, y, z)
-          group.add(block)
+          const block = this.getBlock(x, y, z)
+
+          if (block.blockType === BlockType.Air) continue
+
+          blockTypeToPositions[block.blockType].push(new THREE.Vector3(x, y, z))
         }
       }
     }
 
-    this.add(group)
+    for (const blockType in blockTypeToPositions) {
+      const positions = blockTypeToPositions[blockType as BlockType]
+
+      if (positions.length > 0) {
+        const { x, y, z } = positions[0]
+        const block = this.getBlock(x, y, z)
+
+        const { geometry, material } = block.getGeometryAndMaterial()
+
+        const instancedMesh = new THREE.InstancedMesh(geometry, material, positions.length)
+
+        positions.forEach((position, index) => {
+          const matrix = new THREE.Matrix4().makeTranslation(position.x, position.y, position.z)
+          instancedMesh.setMatrixAt(index, matrix)
+        })
+
+        instancedMesh.instanceMatrix.needsUpdate = true
+
+        this.add(instancedMesh)
+      }
+    }
   }
 
   public generate() {

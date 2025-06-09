@@ -4,20 +4,20 @@ import { BlockType } from "@/types/block"
 import type { Chunk } from "./Chunk"
 
 //! Debug
-const counter = (): [() => number, () => void] => {
-  let count = 0
+// const counter = (): [() => number, () => void] => {
+//   let count = 0
 
-  return [
-    () => count,
-    () => {
-      count++
-      console.log(`Face count: ${count}`)
-    },
-  ]
-}
+//   return [
+//     () => count,
+//     () => {
+//       count++
+//       console.log(`Face count: ${count}`)
+//     },
+//   ]
+// }
 
-const [faceCount, incrementFaceCount] = counter()
-const [blockCount, incrementBlockCount] = counter()
+// const [faceCount, incrementFaceCount] = counter()
+// const [blockCount, incrementBlockCount] = counter()
 
 interface ITexture {
   top: string
@@ -106,7 +106,7 @@ export class Block extends THREE.Mesh {
     ]
 
     // Ensure position is set before calculating face visibility
-    const faceVisibility = this.getFaceVisiblity()
+    // const faceVisibility = this.getFaceVisiblity()
 
     //! Debug
     // console.log(
@@ -122,16 +122,21 @@ export class Block extends THREE.Mesh {
     // Create a material for each face, using a fallback material for hidden faces
     // const fallbackMaterial = new THREE.MeshLambertMaterial({ visible: false })
     const fallbackMaterial = null
-    const materials = faces.map((texture, index) =>
-      faceVisibility[index]
-        ? new THREE.MeshLambertMaterial({
-            map: texture,
-          })
-        : fallbackMaterial
-    )
+    // const materials = faces.map((texture, index) =>
+    //   faceVisibility[index]
+    //     ? new THREE.MeshLambertMaterial({
+    //         map: texture,
+    //       })
+    //     : fallbackMaterial
+    // )
 
     this.geometry = new THREE.BoxGeometry(Block.SIZE, Block.SIZE, Block.SIZE)
-    this.material = materials
+    this.material = faces.map(
+      (texture) =>
+        new THREE.MeshLambertMaterial({
+          map: texture,
+        })
+    )
     this.castShadow = true
     this.receiveShadow = true
   }
@@ -144,34 +149,48 @@ export class Block extends THREE.Mesh {
     return tex
   }
 
-  private getFaceVisiblity(): boolean[] {
-    const visibility = [true, true, true, true, true, true] // right, left, top, bottom, front, back
+  // private getFaceVisiblity(): boolean[] {
+  //   const visibility = [true, true, true, true, true, true] // right, left, top, bottom, front, back
 
-    // Check neighbors in all directions
-    const directions = [
-      [Block.SIZE, 0, 0], // right (x+)
-      [-Block.SIZE, 0, 0], // left (x-)
-      [0, Block.SIZE, 0], // up (y+)
-      [0, -Block.SIZE, 0], // down (y-)
-      [0, 0, Block.SIZE], // front (z+)
-      [0, 0, -Block.SIZE], // back (z-)
-    ]
+  //   // Check neighbors in all directions
+  //   const directions = [
+  //     [Block.SIZE, 0, 0], // right (x+)
+  //     [-Block.SIZE, 0, 0], // left (x-)
+  //     [0, Block.SIZE, 0], // up (y+)
+  //     [0, -Block.SIZE, 0], // down (y-)
+  //     [0, 0, Block.SIZE], // front (z+)
+  //     [0, 0, -Block.SIZE], // back (z-)
+  //   ]
 
-    for (let i = 0; i < directions.length; i++) {
-      const [dx, dy, dz] = directions[i]
+  //   for (let i = 0; i < directions.length; i++) {
+  //     const [dx, dy, dz] = directions[i]
 
-      const neighbor = this.chunk.getBlock(
-        this.position.x + dx,
-        this.position.y + dy,
-        this.position.z + dz
-      )
+  //     const neighbor = this.chunk.getBlock(
+  //       this.position.x + dx,
+  //       this.position.y + dy,
+  //       this.position.z + dz
+  //     )
 
-      if (neighbor.blockType !== BlockType.Air) {
-        visibility[i] = false
-      }
+  //     if (neighbor.blockType !== BlockType.Air) {
+  //       visibility[i] = false
+  //     }
+  //   }
+
+  //   return visibility
+  // }
+
+  public getGeometryAndMaterial(): {
+    geometry: THREE.BufferGeometry
+    material: THREE.Material | THREE.Material[]
+  } {
+    if (!this.geometry || !this.material) {
+      throw new Error("Geometry or material not initialized")
     }
 
-    return visibility
+    return {
+      geometry: this.geometry,
+      material: this.material,
+    }
   }
 }
 
