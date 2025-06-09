@@ -10,6 +10,8 @@ import { createGUI } from "@/gui"
 // Renderer setup
 const renderer = new THREE.WebGLRenderer({})
 
+renderer.shadowMap.type = THREE.PCFSoftShadowMap
+renderer.shadowMap.enabled = true
 renderer.setPixelRatio(window.devicePixelRatio)
 renderer.setSize(window.innerWidth, window.innerHeight)
 
@@ -32,18 +34,39 @@ const controls = new OrbitControls(camera, renderer.domElement)
 // Scene setup
 const scene = new THREE.Scene()
 scene.background = new THREE.Color(0x87ceeb) // Sky blue background
+scene.castShadow = true
+scene.receiveShadow = true
 
 // Lighting setup
 function setupLights() {
+  // Ambient light setup
   const ambientLight = new THREE.AmbientLight()
-  ambientLight.intensity = 1
+  ambientLight.intensity = 0.25
   scene.add(ambientLight)
 
+  // Directional light setup
   const directionalLight = new THREE.DirectionalLight()
-  directionalLight.intensity = 1
   directionalLight.castShadow = true
-  directionalLight.position.set(512, 1024, 512)
+
+  directionalLight.position.set(50, 50, 50)
+
+  directionalLight.shadow.camera.left = -50
+  directionalLight.shadow.camera.right = 50
+  directionalLight.shadow.camera.top = 50
+  directionalLight.shadow.camera.bottom = -50
+  directionalLight.shadow.camera.near = 0.1
+  directionalLight.shadow.camera.far = 100
+  directionalLight.shadow.bias = -0.01
+
+  // directionalLight.intensity = 0.8
+
+  directionalLight.shadow.mapSize = new THREE.Vector2(512, 512) // Higher resolution for shadows
+
   scene.add(directionalLight)
+
+  // Shadow helpers for debugging
+  const directionalLightHelper = new THREE.CameraHelper(directionalLight.shadow.camera)
+  scene.add(directionalLightHelper)
 }
 
 //! Initialize and generate a chunk
