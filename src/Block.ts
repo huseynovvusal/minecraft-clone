@@ -1,26 +1,34 @@
+import * as THREE from "three"
+
 import { BlockType } from "./types/block"
 
-export class Block {
+export class Block extends THREE.Mesh {
   static SIZE = 1
 
-  constructor(readonly id: number, readonly type: BlockType, public isSolid: boolean = true) {}
+  constructor(
+    readonly instaceId: number,
+    readonly blockType: BlockType,
+    public isSolid: boolean = true
+  ) {
+    super()
+  }
 }
 
 export class GrassBlock extends Block {
-  constructor(id: number) {
-    super(id, BlockType.Grass)
+  constructor(instaceId: number) {
+    super(instaceId, BlockType.Grass)
   }
 }
 
 export class DirtBlock extends Block {
-  constructor(id: number) {
-    super(id, BlockType.Dirt)
+  constructor(instaceId: number) {
+    super(instaceId, BlockType.Dirt)
   }
 }
 
 export class StoneBlock extends Block {
-  constructor(id: number) {
-    super(id, BlockType.Stone)
+  constructor(instaceId: number) {
+    super(instaceId, BlockType.Stone)
   }
 }
 

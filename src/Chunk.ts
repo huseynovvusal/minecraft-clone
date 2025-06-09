@@ -5,7 +5,7 @@ import { Terrain } from "./Terrain"
 import { BlockType } from "./types/block"
 
 export class Chunk extends THREE.Group {
-  static SIZE = 32
+  static SIZE = 16
   private blocks: Block[][][] = []
 
   public params = {
@@ -63,7 +63,7 @@ export class Chunk extends THREE.Group {
   public isBlockVisible(x: number, y: number, z: number): boolean {
     const block = this.getBlock(x, y, z)
 
-    if (block.type === BlockType.Air) {
+    if (block.blockType === BlockType.Air) {
       return false
     }
 
@@ -86,7 +86,7 @@ export class Chunk extends THREE.Group {
         return true
       }
 
-      if (this.getBlock(nx, ny, nz).type === BlockType.Air) {
+      if (this.getBlock(nx, ny, nz).blockType === BlockType.Air) {
         return true
       }
     }
@@ -108,9 +108,9 @@ export class Chunk extends THREE.Group {
           let transparent = false
           let opacity = 1.0
 
-          if (block.type === BlockType.Dirt) color = 0x8b4513
-          if (block.type === BlockType.Grass) color = 0x12cc2b
-          if (block.type === BlockType.Stone) color = 0x888888
+          if (block.blockType === BlockType.Dirt) color = 0x8b4513
+          if (block.blockType === BlockType.Grass) color = 0x12cc2b
+          if (block.blockType === BlockType.Stone) color = 0x888888
 
           const geometry = new THREE.BoxGeometry(1, 1, 1)
 
