@@ -2,10 +2,10 @@ import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/Addons.js"
 import Stats from "three/examples/jsm/libs/stats.module.js"
 
-import "./style.css"
+import "@/style.css"
 
-import { Chunk } from "./Chunk"
-import { createGUI } from "./gui"
+import { Chunk } from "@/Chunk"
+import { createGUI } from "@/gui"
 
 // Renderer setup
 const renderer = new THREE.WebGLRenderer({})
@@ -26,6 +26,7 @@ camera.position.set(32, 32, 32)
 // camera.lookAt(32, 32, 32)
 
 // Controls setup
+// @ts-ignore
 const controls = new OrbitControls(camera, renderer.domElement)
 
 // Scene setup

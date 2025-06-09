@@ -1,6 +1,6 @@
 import { SimplexNoise } from "three/examples/jsm/Addons.js"
-import { Chunk } from "./Chunk"
-import { AirBlock, DirtBlock, GrassBlock, StoneBlock } from "./Block"
+import { Chunk } from "@/Chunk"
+import { AirBlock, DirtBlock, GrassBlock } from "@/Block"
 
 export class Terrain {
   private static noise = new SimplexNoise()

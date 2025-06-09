@@ -1,8 +1,8 @@
 import * as THREE from "three"
 
-import { AirBlock, Block } from "./Block"
-import { Terrain } from "./Terrain"
-import { BlockType } from "./types/block"
+import { AirBlock, Block } from "@/Block"
+import { Terrain } from "@/Terrain"
+import { BlockType } from "@/types/block"
 
 export class Chunk extends THREE.Group {
   static SIZE = 16

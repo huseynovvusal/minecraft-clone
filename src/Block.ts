@@ -1,6 +1,6 @@
 import * as THREE from "three"
 
-import { BlockType } from "./types/block"
+import { BlockType } from "@/types/block"
 
 export class Block extends THREE.Mesh {
   static SIZE = 1
