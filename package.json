@@ -14,7 +14,6 @@
     "vite": "^6.3.5"
   },
   "dependencies": {
-    "simplex-noise": "^4.0.3",
     "three": "^0.177.0"
   }
 }

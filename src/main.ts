@@ -5,8 +5,7 @@ import Stats from "three/examples/jsm/libs/stats.module.js"
 import "./style.css"
 
 import { Chunk } from "./Chunk"
-import { ChunkMesh } from "./ChunkMesh"
-import { Terrain } from "./Terrain"
+import { createGUI } from "./gui"
 
 // Renderer setup
 const renderer = new THREE.WebGLRenderer({})
@@ -42,15 +41,13 @@ function setupLights() {
   const directionalLight = new THREE.DirectionalLight()
   directionalLight.intensity = 1
   directionalLight.castShadow = true
-  directionalLight.position.set(50, 50, 50)
+  directionalLight.position.set(512, 1024, 512)
   scene.add(directionalLight)
 }
 
-// Initialize and generate two chunks
-const chunk1 = new Chunk()
-Terrain.generate(chunk1, 0, 0, 0.05, 3, 10)
-const chunkMesh1 = ChunkMesh.fromChunk(chunk1)
-scene.add(chunkMesh1)
+//! Initialize and generate a chunk
+const chunk = new Chunk()
+scene.add(chunk)
 
 // Render loop
 function animate() {
@@ -70,5 +67,6 @@ window.addEventListener("resize", () => {
   renderer.setSize(window.innerWidth, window.innerHeight)
 })
 
+createGUI(chunk)
 setupLights()
 animate()
