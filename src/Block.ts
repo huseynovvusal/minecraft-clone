@@ -1,6 +1,23 @@
 import * as THREE from "three"
 
 import { BlockType } from "@/types/block"
+import type { Chunk } from "./Chunk"
+
+//! Debug
+const counter = (): [() => number, () => void] => {
+  let count = 0
+
+  return [
+    () => count,
+    () => {
+      count++
+      console.log(`Face count: ${count}`)
+    },
+  ]
+}
+
+const [faceCount, incrementFaceCount] = counter()
+const [blockCount, incrementBlockCount] = counter()
 
 interface ITexture {
   top: string
@@ -54,11 +71,14 @@ export class Block extends THREE.Mesh {
   private textureLoader = new THREE.TextureLoader()
 
   constructor(
+    private readonly chunk: Chunk,
     public readonly instaceId: number,
     public readonly blockType: BlockType,
-    public readonly isSolid: boolean = true
+    public readonly isSolid: boolean = true,
+    position: THREE.Vector3 = new THREE.Vector3(0, 0, 0)
   ) {
     super()
+    this.position.copy(position)
   }
 
   protected load(texturePaths: ITexture | undefined): void {
@@ -85,14 +105,29 @@ export class Block extends THREE.Mesh {
       textures.back,
     ]
 
-    // Create a material for each face
-    const materials = faces.map(
-      (texture) =>
-        new THREE.MeshLambertMaterial({
-          map: texture,
-          transparent: true,
-          flatShading: true,
-        })
+    // Ensure position is set before calculating face visibility
+    const faceVisibility = this.getFaceVisiblity()
+
+    //! Debug
+    // console.log(
+    //   `Block ${this.blockType} at ${this.position.toArray()} has visibility: ${faceVisibility}`
+    // )
+    // for (let isVisible of faceVisibility) {
+    //   if (isVisible) {
+    //     incrementFaceCount()
+    //   }
+    // }
+    // incrementBlockCount()
+
+    // Create a material for each face, using a fallback material for hidden faces
+    // const fallbackMaterial = new THREE.MeshLambertMaterial({ visible: false })
+    const fallbackMaterial = null
+    const materials = faces.map((texture, index) =>
+      faceVisibility[index]
+        ? new THREE.MeshLambertMaterial({
+            map: texture,
+          })
+        : fallbackMaterial
     )
 
     this.geometry = new THREE.BoxGeometry(Block.SIZE, Block.SIZE, Block.SIZE)
@@ -108,37 +143,63 @@ export class Block extends THREE.Mesh {
     tex.generateMipmaps = false
     return tex
   }
+
+  private getFaceVisiblity(): boolean[] {
+    const visibility = [true, true, true, true, true, true] // right, left, top, bottom, front, back
+
+    // Check neighbors in all directions
+    const directions = [
+      [Block.SIZE, 0, 0], // right (x+)
+      [-Block.SIZE, 0, 0], // left (x-)
+      [0, Block.SIZE, 0], // up (y+)
+      [0, -Block.SIZE, 0], // down (y-)
+      [0, 0, Block.SIZE], // front (z+)
+      [0, 0, -Block.SIZE], // back (z-)
+    ]
+
+    for (let i = 0; i < directions.length; i++) {
+      const [dx, dy, dz] = directions[i]
+
+      const neighbor = this.chunk.getBlock(
+        this.position.x + dx,
+        this.position.y + dy,
+        this.position.z + dz
+      )
+
+      if (neighbor.blockType !== BlockType.Air) {
+        visibility[i] = false
+      }
+    }
+
+    return visibility
+  }
 }
 
 export class GrassBlock extends Block {
-  constructor(instaceId: number) {
-    super(instaceId, BlockType.Grass)
+  constructor(chunk: Chunk, instaceId: number, position: THREE.Vector3) {
+    super(chunk, instaceId, BlockType.Grass, true, position)
 
     this.load(TEXTURE_MAP[BlockType.Grass])
   }
 }
-
 export class DirtBlock extends Block {
-  constructor(instaceId: number) {
-    super(instaceId, BlockType.Dirt)
+  constructor(chunk: Chunk, instaceId: number, position: THREE.Vector3) {
+    super(chunk, instaceId, BlockType.Dirt, true, position)
 
     this.load(TEXTURE_MAP[BlockType.Dirt])
   }
 }
 
 export class StoneBlock extends Block {
-  constructor(instaceId: number) {
-    super(instaceId, BlockType.Stone)
+  constructor(chunk: Chunk, instaceId: number, position: THREE.Vector3) {
+    super(chunk, instaceId, BlockType.Stone, true, position)
 
-    this.material = new THREE.MeshLambertMaterial({ color: 0x888888 })
-    this.geometry = new THREE.BoxGeometry(Block.SIZE, Block.SIZE, Block.SIZE)
-    this.castShadow = true
-    this.receiveShadow = true
+    this.load(TEXTURE_MAP[BlockType.Stone])
   }
 }
 
 export class AirBlock extends Block {
-  constructor() {
-    super(0, BlockType.Air, false)
+  constructor(chunk: Chunk, position: THREE.Vector3 = new THREE.Vector3(0, 0, 0)) {
+    super(chunk, 0, BlockType.Air, false, position)
   }
 }

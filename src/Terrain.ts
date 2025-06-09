@@ -1,6 +1,7 @@
 import { SimplexNoise } from "three/examples/jsm/Addons.js"
 import { Chunk } from "@/Chunk"
 import { AirBlock, DirtBlock, GrassBlock } from "@/Block"
+import * as THREE from "three"
 
 export class Terrain {
   private static noise = new SimplexNoise()
@@ -22,12 +23,13 @@ export class Terrain {
         )
 
         for (let y = 0; y < Chunk.SIZE; y++) {
+          const pos = new THREE.Vector3(x, y, z)
           if (y < height - 1) {
-            chunk.setBlock(x, y, z, new DirtBlock(1))
+            chunk.setBlock(x, y, z, new DirtBlock(chunk, 1, pos))
           } else if (y === height - 1) {
-            chunk.setBlock(x, y, z, new GrassBlock(2))
+            chunk.setBlock(x, y, z, new GrassBlock(chunk, 2, pos))
           } else {
-            chunk.setBlock(x, y, z, new AirBlock())
+            chunk.setBlock(x, y, z, new AirBlock(chunk, pos))
           }
         }
       }

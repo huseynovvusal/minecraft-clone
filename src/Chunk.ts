@@ -5,7 +5,7 @@ import { Terrain } from "@/Terrain"
 import { BlockType } from "@/types/block"
 
 export class Chunk extends THREE.Group {
-  static SIZE = 16
+  static SIZE = 64
   private blocks: Block[][][] = []
 
   public params = {
@@ -19,7 +19,6 @@ export class Chunk extends THREE.Group {
   constructor() {
     super()
 
-    this.initializeBlocks()
     this.generate()
   }
 
@@ -29,7 +28,7 @@ export class Chunk extends THREE.Group {
       for (let y = 0; y < Chunk.SIZE; y++) {
         this.blocks[x][y] = []
         for (let z = 0; z < Chunk.SIZE; z++) {
-          this.blocks[x][y][z] = new AirBlock()
+          this.blocks[x][y][z] = new AirBlock(this, new THREE.Vector3(x, y, z))
         }
       }
     }
@@ -37,7 +36,9 @@ export class Chunk extends THREE.Group {
 
   public getBlock(x: number, y: number, z: number): Block {
     if (x < 0 || x >= Chunk.SIZE || y < 0 || y >= Chunk.SIZE || z < 0 || z >= Chunk.SIZE) {
-      throw new Error("Block coordinates out of bounds")
+      // throw new Error("Block coordinates out of bounds")
+      console.warn(`Block coordinates out of bounds: (${x}, ${y}, ${z})`)
+      return new AirBlock(this, new THREE.Vector3(x, y, z)) // Return an AirBlock at the correct position
     }
     return this.blocks[x][y][z]
   }
@@ -71,8 +72,8 @@ export class Chunk extends THREE.Group {
     const directions = [
       [1, 0, 0], // right (x+)
       [-1, 0, 0], // left (x-)
-      [0, 1, 0], // up (y+)
-      [0, -1, 0], // down (y-)
+      [0, 1, 0], // top (y+)
+      [0, -1, 0], // bottom (y-)
       [0, 0, 1], // front (z+)
       [0, 0, -1], // back (z-)
     ]
@@ -81,10 +82,6 @@ export class Chunk extends THREE.Group {
       const nx = x + dx
       const ny = y + dy
       const nz = z + dz
-
-      if (nx < 0 || nx >= Chunk.SIZE || ny < 0 || ny >= Chunk.SIZE || nz < 0 || nz >= Chunk.SIZE) {
-        return true
-      }
 
       if (this.getBlock(nx, ny, nz).blockType === BlockType.Air) {
         return true
@@ -104,6 +101,7 @@ export class Chunk extends THREE.Group {
         for (let z = 0; z < Chunk.SIZE; z++) {
           const block = this.getBlock(x, y, z)
 
+          // Skip blocks that are completely surrounded (not visible)
           if (!this.isBlockVisible(x, y, z)) continue
 
           block.position.set(x, y, z)
@@ -116,6 +114,7 @@ export class Chunk extends THREE.Group {
   }
 
   public generate() {
+    this.initializeBlocks()
     this.fillTerrain()
     this.generateMeshes()
   }
