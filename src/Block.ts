@@ -76,45 +76,24 @@ export class Block extends THREE.Mesh {
       back: this.loadTexture(texturePaths.back),
     }
 
-    // Create a material for each face
-    const materials = [
-      new THREE.MeshLambertMaterial({
-        map: textures.right,
-        side: THREE.DoubleSide,
-        transparent: true,
-        flatShading: true,
-      }), // right
-      new THREE.MeshLambertMaterial({
-        map: textures.left,
-        side: THREE.DoubleSide,
-        transparent: true,
-        flatShading: true,
-      }), // left
-      new THREE.MeshLambertMaterial({
-        map: textures.top,
-        side: THREE.DoubleSide,
-        transparent: true,
-        flatShading: true,
-      }), // top
-      new THREE.MeshLambertMaterial({
-        map: textures.bottom,
-        side: THREE.DoubleSide,
-        transparent: true,
-        flatShading: true,
-      }), // bottom
-      new THREE.MeshLambertMaterial({
-        map: textures.front,
-        side: THREE.DoubleSide,
-        transparent: true,
-        flatShading: true,
-      }), // front
-      new THREE.MeshLambertMaterial({
-        map: textures.back,
-        side: THREE.DoubleSide,
-        transparent: true,
-        flatShading: true,
-      }), // back
+    const faces = [
+      textures.right,
+      textures.left,
+      textures.top,
+      textures.bottom,
+      textures.front,
+      textures.back,
     ]
+
+    // Create a material for each face
+    const materials = faces.map(
+      (texture) =>
+        new THREE.MeshLambertMaterial({
+          map: texture,
+          transparent: true,
+          flatShading: true,
+        })
+    )
 
     this.geometry = new THREE.BoxGeometry(Block.SIZE, Block.SIZE, Block.SIZE)
     this.material = materials
