@@ -1,6 +1,6 @@
 import * as THREE from "three"
 
-import { AirBlock, type Block } from "./Block"
+import { AirBlock, Block } from "./Block"
 import { Terrain } from "./Terrain"
 import { BlockType } from "./types/block"
 
@@ -104,25 +104,8 @@ export class Chunk extends THREE.Group {
 
           if (!this.isBlockVisible(x, y, z)) continue
 
-          let color = 0x00ff00
-          let transparent = false
-          let opacity = 1.0
-
-          if (block.blockType === BlockType.Dirt) color = 0x8b4513
-          if (block.blockType === BlockType.Grass) color = 0x12cc2b
-          if (block.blockType === BlockType.Stone) color = 0x888888
-
-          const geometry = new THREE.BoxGeometry(1, 1, 1)
-
-          const material = new THREE.MeshLambertMaterial({
-            color,
-            transparent,
-            opacity,
-          })
-
-          const mesh = new THREE.Mesh(geometry, material)
-          mesh.position.set(x, y, z)
-          group.add(mesh)
+          block.position.set(x, y, z)
+          group.add(block)
         }
       }
     }
