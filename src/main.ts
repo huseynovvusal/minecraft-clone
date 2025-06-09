@@ -5,7 +5,7 @@ import Stats from "three/examples/jsm/libs/stats.module.js"
 import "@/styles/style.css"
 
 import { Chunk } from "@/Chunk"
-import { createGUI } from "@/gui"
+import { createGUI } from "@/GUI"
 
 // Renderer setup
 const renderer = new THREE.WebGLRenderer({})
@@ -57,8 +57,6 @@ function setupLights() {
   directionalLight.shadow.camera.near = 0.1
   directionalLight.shadow.camera.far = 100
   directionalLight.shadow.bias = -0.01
-
-  // directionalLight.intensity = 0.8
 
   directionalLight.shadow.mapSize = new THREE.Vector2(512, 512) // Higher resolution for shadows
 

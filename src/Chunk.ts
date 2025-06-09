@@ -95,6 +95,8 @@ export class Chunk extends THREE.Group {
   }
 
   private generateMeshes(): void {
+    this.clear() // Clear previous meshes if any
+
     const group = new THREE.Group()
 
     for (let x = 0; x < Chunk.SIZE; x++) {
