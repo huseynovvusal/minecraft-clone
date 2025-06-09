@@ -2,7 +2,7 @@ import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/Addons.js"
 import Stats from "three/examples/jsm/libs/stats.module.js"
 
-import "@styles/style.css"
+import "@/styles/style.css"
 
 import { Chunk } from "@/Chunk"
 import { createGUI } from "@/gui"
