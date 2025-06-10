@@ -3,11 +3,16 @@ import * as THREE from "three"
 import { AirBlock, Block } from "@/Block"
 import { Terrain } from "@/Terrain"
 import { BlockType } from "@/types/block"
+import BlockStorage from "./BlockStorage"
 
 export class Chunk extends THREE.Group {
-  static SIZE = 16
-  private blocks: Block[][][] = []
+  // private blocks: Block[][][] = []
+  private blocks: BlockStorage = new BlockStorage()
 
+  public size = {
+    width: 16,
+    height: 16,
+  }
   public params = {
     terrain: {
       scale: 0.05,
@@ -23,31 +28,50 @@ export class Chunk extends THREE.Group {
   }
 
   private initializeBlocks() {
-    for (let x = 0; x < Chunk.SIZE; x++) {
-      this.blocks[x] = []
-      for (let y = 0; y < Chunk.SIZE; y++) {
-        this.blocks[x][y] = []
-        for (let z = 0; z < Chunk.SIZE; z++) {
-          this.blocks[x][y][z] = new AirBlock(this, new THREE.Vector3(x, y, z))
-        }
-      }
-    }
+    // for (let x = 0; x < this.size.width; x++) {
+    //   this.blocks[x] = []
+    //   for (let y = 0; y < this.size.height; y++) {
+    //     this.blocks[x][y] = []
+    //     for (let z = 0; z < this.size.width; z++) {
+    //       this.blocks[x][y][z] = new AirBlock(this, new THREE.Vector3(x, y, z))
+    //     }
+    //   }
+    // }
   }
 
-  public getBlock(x: number, y: number, z: number): Block {
-    if (x < 0 || x >= Chunk.SIZE || y < 0 || y >= Chunk.SIZE || z < 0 || z >= Chunk.SIZE) {
+  public getBlock(x: number, y: number, z: number): Block | null {
+    if (
+      x < 0 ||
+      x >= this.size.width ||
+      y < 0 ||
+      y >= this.size.height ||
+      z < 0 ||
+      z >= this.size.width
+    ) {
       // throw new Error("Block coordinates out of bounds")
       console.warn(`Block coordinates out of bounds: (${x}, ${y}, ${z})`)
-      return new AirBlock(this, new THREE.Vector3(x, y, z)) // Return an AirBlock at the correct position
+
+      return null
     }
-    return this.blocks[x][y][z]
+
+    return this.blocks.getBlock(x, y, z) || null
+    // return this.blocks[x][y][z]
   }
 
   public setBlock(x: number, y: number, z: number, block: Block): void {
-    if (x < 0 || x >= Chunk.SIZE || y < 0 || y >= Chunk.SIZE || z < 0 || z >= Chunk.SIZE) {
+    if (
+      x < 0 ||
+      x >= this.size.width ||
+      y < 0 ||
+      y >= this.size.height ||
+      z < 0 ||
+      z >= this.size.width
+    ) {
       throw new Error("Block coordinates out of bounds")
     }
-    this.blocks[x][y][z] = block
+
+    this.blocks.setBlock(x, y, z, block)
+    // this.blocks[x][y][z] = block
   }
 
   public fillTerrain() {
@@ -64,7 +88,7 @@ export class Chunk extends THREE.Group {
   public isBlockVisible(x: number, y: number, z: number): boolean {
     const block = this.getBlock(x, y, z)
 
-    if (block.blockType === BlockType.Air) {
+    if (!block) {
       return false
     }
 
@@ -83,7 +107,9 @@ export class Chunk extends THREE.Group {
       const ny = y + dy
       const nz = z + dz
 
-      if (this.getBlock(nx, ny, nz).blockType === BlockType.Air) {
+      const neighborBlock = this.getBlock(nx, ny, nz)
+
+      if (!neighborBlock || neighborBlock.blockType === BlockType.Air) {
         return true
       }
     }
@@ -102,14 +128,12 @@ export class Chunk extends THREE.Group {
     }
 
     // Initialize positions for each block type
-    for (let x = 0; x < Chunk.SIZE; x++) {
-      for (let y = 0; y < Chunk.SIZE; y++) {
-        for (let z = 0; z < Chunk.SIZE; z++) {
-          if (!this.isBlockVisible(x, y, z)) continue
-
+    for (let x = 0; x < this.size.width; x++) {
+      for (let y = 0; y < this.size.height; y++) {
+        for (let z = 0; z < this.size.width; z++) {
           const block = this.getBlock(x, y, z)
 
-          if (block.blockType === BlockType.Air) continue
+          if (!block || !this.isBlockVisible(x, y, z)) continue
 
           blockTypeToPositions[block.blockType].push(new THREE.Vector3(x, y, z))
         }
@@ -122,6 +146,8 @@ export class Chunk extends THREE.Group {
       if (positions.length > 0) {
         const { x, y, z } = positions[0]
         const block = this.getBlock(x, y, z)
+
+        if (!block) continue
 
         const { geometry, material } = block.getGeometryAndMaterial()
 

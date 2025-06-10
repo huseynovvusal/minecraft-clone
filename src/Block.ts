@@ -3,22 +3,6 @@ import * as THREE from "three"
 import { BlockType } from "@/types/block"
 import type { Chunk } from "./Chunk"
 
-//! Debug
-// const counter = (): [() => number, () => void] => {
-//   let count = 0
-
-//   return [
-//     () => count,
-//     () => {
-//       count++
-//       console.log(`Face count: ${count}`)
-//     },
-//   ]
-// }
-
-// const [faceCount, incrementFaceCount] = counter()
-// const [blockCount, incrementBlockCount] = counter()
-
 interface ITexture {
   top: string
   bottom: string
@@ -105,31 +89,6 @@ export class Block extends THREE.Mesh {
       textures.back,
     ]
 
-    // Ensure position is set before calculating face visibility
-    // const faceVisibility = this.getFaceVisiblity()
-
-    //! Debug
-    // console.log(
-    //   `Block ${this.blockType} at ${this.position.toArray()} has visibility: ${faceVisibility}`
-    // )
-    // for (let isVisible of faceVisibility) {
-    //   if (isVisible) {
-    //     incrementFaceCount()
-    //   }
-    // }
-    // incrementBlockCount()
-
-    // Create a material for each face, using a fallback material for hidden faces
-    // const fallbackMaterial = new THREE.MeshLambertMaterial({ visible: false })
-    const fallbackMaterial = null
-    // const materials = faces.map((texture, index) =>
-    //   faceVisibility[index]
-    //     ? new THREE.MeshLambertMaterial({
-    //         map: texture,
-    //       })
-    //     : fallbackMaterial
-    // )
-
     this.geometry = new THREE.BoxGeometry(Block.SIZE, Block.SIZE, Block.SIZE)
     this.material = faces.map(
       (texture) =>
@@ -148,36 +107,6 @@ export class Block extends THREE.Mesh {
     tex.generateMipmaps = false
     return tex
   }
-
-  // private getFaceVisiblity(): boolean[] {
-  //   const visibility = [true, true, true, true, true, true] // right, left, top, bottom, front, back
-
-  //   // Check neighbors in all directions
-  //   const directions = [
-  //     [Block.SIZE, 0, 0], // right (x+)
-  //     [-Block.SIZE, 0, 0], // left (x-)
-  //     [0, Block.SIZE, 0], // up (y+)
-  //     [0, -Block.SIZE, 0], // down (y-)
-  //     [0, 0, Block.SIZE], // front (z+)
-  //     [0, 0, -Block.SIZE], // back (z-)
-  //   ]
-
-  //   for (let i = 0; i < directions.length; i++) {
-  //     const [dx, dy, dz] = directions[i]
-
-  //     const neighbor = this.chunk.getBlock(
-  //       this.position.x + dx,
-  //       this.position.y + dy,
-  //       this.position.z + dz
-  //     )
-
-  //     if (neighbor.blockType !== BlockType.Air) {
-  //       visibility[i] = false
-  //     }
-  //   }
-
-  //   return visibility
-  // }
 
   public getGeometryAndMaterial(): {
     geometry: THREE.BufferGeometry

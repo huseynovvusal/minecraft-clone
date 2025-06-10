@@ -1,3 +1,5 @@
+export type TBloockCoord = `${number},${number},${number}`
+
 export enum BlockType {
   Air,
   Dirt,
