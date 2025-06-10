@@ -117,7 +117,7 @@ export class Chunk extends THREE.Group {
     }
 
     for (const blockType in blockTypeToPositions) {
-      const positions = blockTypeToPositions[blockType as BlockType]
+      const positions = blockTypeToPositions[blockType as unknown as BlockType]
 
       if (positions.length > 0) {
         const { x, y, z } = positions[0]
