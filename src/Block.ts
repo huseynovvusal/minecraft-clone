@@ -55,6 +55,7 @@ export class Block extends THREE.Mesh {
   private textureLoader = new THREE.TextureLoader()
 
   constructor(
+    //TODO: Remove chunk dependency if not needed
     private readonly chunk: Chunk,
     public readonly instaceId: number,
     public readonly blockType: BlockType,

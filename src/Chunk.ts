@@ -1,6 +1,6 @@
 import * as THREE from "three"
 
-import { AirBlock, Block } from "@/Block"
+import { Block } from "@/Block"
 import { Terrain } from "@/Terrain"
 import { BlockType } from "@/types/block"
 import BlockStorage from "./BlockStorage"
