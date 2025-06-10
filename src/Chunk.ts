@@ -4,14 +4,15 @@ import { Block } from "@/Block"
 import { Terrain } from "@/Terrain"
 import { BlockType } from "@/types/block"
 import BlockStorage from "./BlockStorage"
+import TextureManager from "./TextureManager"
 
 export class Chunk extends THREE.Group {
   // private blocks: Block[][][] = []
   private blocks: BlockStorage = new BlockStorage()
 
   public size = {
-    width: 16,
-    height: 16,
+    width: 64,
+    height: 64,
   }
   public params = {
     terrain: {
@@ -25,18 +26,6 @@ export class Chunk extends THREE.Group {
     super()
 
     this.generate()
-  }
-
-  private initializeBlocks() {
-    // for (let x = 0; x < this.size.width; x++) {
-    //   this.blocks[x] = []
-    //   for (let y = 0; y < this.size.height; y++) {
-    //     this.blocks[x][y] = []
-    //     for (let z = 0; z < this.size.width; z++) {
-    //       this.blocks[x][y][z] = new AirBlock(this, new THREE.Vector3(x, y, z))
-    //     }
-    //   }
-    // }
   }
 
   public getBlock(x: number, y: number, z: number): Block | null {
@@ -149,9 +138,15 @@ export class Chunk extends THREE.Group {
 
         if (!block) continue
 
-        const { geometry, material } = block.getGeometryAndMaterial()
+        // const { geometry, material } = block.getGeometryAndMaterial()
+        const geometry = new THREE.BoxGeometry(1, 1, 1)
+        const textures = TextureManager.getInstance().getTextures(block.blockType)
+        const material = textures.map((texture) => new THREE.MeshLambertMaterial({ map: texture }))
 
         const instancedMesh = new THREE.InstancedMesh(geometry, material, positions.length)
+
+        instancedMesh.castShadow = true
+        instancedMesh.receiveShadow = true
 
         positions.forEach((position, index) => {
           const matrix = new THREE.Matrix4().makeTranslation(position.x, position.y, position.z)
@@ -166,7 +161,6 @@ export class Chunk extends THREE.Group {
   }
 
   public generate() {
-    this.initializeBlocks()
     this.fillTerrain()
     this.generateMeshes()
   }

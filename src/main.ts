@@ -6,6 +6,14 @@ import "@/styles/style.css"
 
 import { Chunk } from "@/Chunk"
 import { createGUI } from "@/GUI"
+import TextureManager from "./TextureManager"
+
+//
+await TextureManager.getInstance()
+  .loadTextures()
+  .then(() => {
+    console.log("Textures loaded successfully")
+  })
 
 // Renderer setup
 const renderer = new THREE.WebGLRenderer({})
