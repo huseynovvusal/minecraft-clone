@@ -11,8 +11,8 @@ export class Chunk extends THREE.Group {
   private blocks: BlockStorage = new BlockStorage()
 
   public size = {
-    width: 64,
-    height: 64,
+    width: 8,
+    height: 8,
   }
   public params = {
     terrain: {
@@ -77,7 +77,7 @@ export class Chunk extends THREE.Group {
   public isBlockVisible(x: number, y: number, z: number): boolean {
     const block = this.getBlock(x, y, z)
 
-    if (!block) {
+    if (!block || block.blockType === BlockType.Air) {
       return false
     }
 
@@ -116,6 +116,9 @@ export class Chunk extends THREE.Group {
       [BlockType.Air]: [],
     }
 
+    //! Measure performance
+    const start = performance.now()
+
     // Initialize positions for each block type
     for (let x = 0; x < this.size.width; x++) {
       for (let y = 0; y < this.size.height; y++) {
@@ -138,7 +141,6 @@ export class Chunk extends THREE.Group {
 
         if (!block) continue
 
-        // const { geometry, material } = block.getGeometryAndMaterial()
         const geometry = new THREE.BoxGeometry(1, 1, 1)
         const textures = TextureManager.getInstance().getTextures(block.blockType)
         const material = textures.map((texture) => new THREE.MeshLambertMaterial({ map: texture }))
@@ -158,6 +160,10 @@ export class Chunk extends THREE.Group {
         this.add(instancedMesh)
       }
     }
+
+    // !
+    const end = performance.now()
+    console.log(`Chunk generated in ${end - start} ms`)
   }
 
   public generate() {
