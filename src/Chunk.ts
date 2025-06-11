@@ -16,6 +16,7 @@ export class Chunk extends THREE.Group {
   }
 
   public params = {
+    seed: 0,
     terrain: {
       scale: 0.05,
       amplitude: 5,
@@ -39,13 +40,12 @@ export class Chunk extends THREE.Group {
       z >= this.size.width
     ) {
       // throw new Error("Block coordinates out of bounds")
-      console.warn(`Block coordinates out of bounds: (${x}, ${y}, ${z})`)
+      // console.warn(`Block coordinates out of bounds: (${x}, ${y}, ${z})`)
 
       return null
     }
 
     return this.blocks.getBlock(x, y, z) || null
-    // return this.blocks[x][y][z]
   }
 
   public setBlock(x: number, y: number, z: number, block: Block): void {
@@ -81,8 +81,6 @@ export class Chunk extends THREE.Group {
     if (!block || block.blockType === BlockType.Air) {
       return false
     }
-
-    return true
 
     // Directions to check for neighbors: [x, y, z]
     const directions = [
