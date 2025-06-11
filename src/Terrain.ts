@@ -1,6 +1,6 @@
 import { SimplexNoise } from "three/examples/jsm/Addons.js"
 import { Chunk } from "@/Chunk"
-import { AirBlock, CoalOreBlock, DirtBlock, GrassBlock, StoneBlock } from "@/Block"
+import { AirBlock, DirtBlock, GrassBlock, StoneBlock } from "@/Block"
 import SeedGenerator from "./SeedGenerator"
 import { BlockType } from "./types/block"
 
@@ -54,7 +54,6 @@ export class Terrain {
             continue
           }
 
-          const coalOreBlock = new CoalOreBlock()
           const stoneBlock = new StoneBlock()
 
           const value = simplex.noise3d(
@@ -63,9 +62,7 @@ export class Terrain {
             z * stoneBlock.scale.z
           )
 
-          if (value > coalOreBlock.scarcity) {
-            chunk.setBlock(x, y, z, coalOreBlock)
-          } else if (value > stoneBlock.scarcity) {
+          if (value > stoneBlock.scarcity) {
             chunk.setBlock(x, y, z, stoneBlock)
           }
         }

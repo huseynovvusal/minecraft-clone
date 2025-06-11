@@ -7,13 +7,19 @@ import BlockStorage from "./BlockStorage"
 import TextureManager from "./TextureManager"
 
 export class Chunk extends THREE.Group {
-  private blocks: BlockStorage = new BlockStorage()
-
   public readonly pos: THREE.Vector2 = new THREE.Vector2(0, 0)
+
   public size = {
     width: 64,
     height: 32,
   }
+
+  private blocks: BlockStorage = new BlockStorage(
+    this.size.width,
+    this.size.height,
+    this.size.width
+  )
+
   public params = {
     seed: 0,
     terrain: {

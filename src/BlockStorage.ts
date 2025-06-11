@@ -1,31 +1,55 @@
-import type { Block } from "./Block"
-import type { TBloockCoord } from "./types/block"
+import { AirBlock, type Block } from "./Block"
 
 class BlockStorage {
-  private block: Map<TBloockCoord, Block> = new Map()
+  private block: Block[][][] = []
 
-  static coordToKey(x: number, y: number, z: number): TBloockCoord {
-    return `${x},${y},${z}`
+  constructor(private readonly x: number, private readonly y: number, private readonly z: number) {
+    this.initialize(x, y, z)
+  }
+
+  public initialize(x: number, y: number, z: number): void {
+    for (let i = 0; i < this.x; i++) {
+      this.block[i] = []
+      for (let j = 0; j < this.y; j++) {
+        this.block[i][j] = []
+        for (let k = 0; k < this.z; k++) {
+          this.block[i][j][k] = new AirBlock()
+        }
+      }
+    }
   }
 
   public getBlock(x: number, y: number, z: number): Block | undefined {
-    return this.block.get(BlockStorage.coordToKey(x, y, z))
+    if (this.block[x] && this.block[x][y] && this.block[x][y][z] !== undefined) {
+      return this.block[x][y][z]
+    }
+    return undefined
   }
 
-  public setBlock(x: number, y: number, z: number, block: Block): void {
-    this.block.set(BlockStorage.coordToKey(x, y, z), block)
+  public setBlock(x: number, y: number, z: number, block: Block): boolean {
+    if (!this.getBlock(x, y, z)) {
+      return false
+    }
+
+    this.block[x][y][z] = block
+    return true
   }
 
   public hasBlock(x: number, y: number, z: number): boolean {
-    return this.block.has(BlockStorage.coordToKey(x, y, z))
+    return this.block[x] && this.block[x][y] && this.block[x][y][z] !== undefined
   }
 
   public deleteBlock(x: number, y: number, z: number): boolean {
-    return this.block.delete(BlockStorage.coordToKey(x, y, z))
+    if (this.hasBlock(x, y, z)) {
+      this.block[x][y][z] = new AirBlock()
+      return true
+    }
+
+    return false
   }
 
   public clear(): void {
-    this.block.clear()
+    this.initialize(this.x, this.y, this.z)
   }
 }
 
