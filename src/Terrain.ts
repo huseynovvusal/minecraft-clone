@@ -7,14 +7,10 @@ export class Terrain {
   /**
    * Generates terrain for a given chunk using Simplex noise.
    */
-  static generate(
-    chunk: Chunk,
-    chunkX: number,
-    chunkY: number,
-    scale: number = 0.02,
-    amplitude: number = 5,
-    offset: number = 10
-  ): void {
+  static generate(chunk: Chunk): void {
+    const { amplitude, offset, scale } = chunk.params.terrain
+    const { x: chunkX, y: chunkY } = chunk.pos
+
     const seed = chunk.params.seed
     const simplex = new SimplexNoise(new SeedGenerator(seed))
 
@@ -31,11 +27,11 @@ export class Terrain {
             chunk.setBlock(x, y, z, new DirtBlock())
           } else if (y === height - 1) {
             chunk.setBlock(x, y, z, new GrassBlock())
-          } else {
-            chunk.setBlock(x, y, z, new AirBlock())
           }
         }
       }
     }
   }
+
+  private static generateResources(chunk: Chunk) {}
 }

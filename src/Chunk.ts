@@ -7,14 +7,13 @@ import BlockStorage from "./BlockStorage"
 import TextureManager from "./TextureManager"
 
 export class Chunk extends THREE.Group {
-  // private blocks: Block[][][] = []
   private blocks: BlockStorage = new BlockStorage()
 
+  public readonly pos: THREE.Vector2 = new THREE.Vector2(0, 0)
   public size = {
     width: 64,
-    height: 64,
+    height: 32,
   }
-
   public params = {
     seed: 0,
     terrain: {
@@ -65,14 +64,7 @@ export class Chunk extends THREE.Group {
   }
 
   public fillTerrain() {
-    Terrain.generate(
-      this,
-      0,
-      0,
-      this.params.terrain.scale,
-      this.params.terrain.amplitude,
-      this.params.terrain.offset
-    )
+    Terrain.generate(this)
   }
 
   public isBlockVisible(x: number, y: number, z: number): boolean {
@@ -168,6 +160,7 @@ export class Chunk extends THREE.Group {
   }
 
   public generate() {
+    this.blocks.clear() // Clear previous blocks
     this.fillTerrain()
     this.generateMeshes()
   }
