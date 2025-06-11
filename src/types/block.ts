@@ -8,7 +8,12 @@ export enum BlockType {
 }
 
 export interface IBlock {
-  id: number
-  type: BlockType
+  blockType: BlockType
   isSolid: boolean
+  scale?: {
+    x: number
+    y: number
+    z: number
+  }
+  scarcity?: number
 }

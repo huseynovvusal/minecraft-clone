@@ -1,9 +1,14 @@
-import { BlockType } from "@/types/block"
+import { BlockType, type IBlock } from "@/types/block"
 
-export class Block {
+export class Block implements IBlock {
   static SIZE = 1
 
-  constructor(public readonly blockType: BlockType, public readonly isSolid: boolean = true) {}
+  constructor(
+    public readonly blockType: BlockType,
+    public readonly isSolid: boolean = true,
+    public readonly scale: { x: number; y: number; z: number } = { x: 1, y: 1, z: 1 },
+    public readonly scarcity: number = 0
+  ) {}
 }
 
 export class AirBlock extends Block {
@@ -26,6 +31,6 @@ export class GrassBlock extends Block {
 
 export class StoneBlock extends Block {
   constructor() {
-    super(BlockType.Stone)
+    super(BlockType.Stone, true, { x: 0.045, y: 0.05, z: 0.055 }, 0.5)
   }
 }

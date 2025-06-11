@@ -1,13 +1,16 @@
 import { SimplexNoise } from "three/examples/jsm/Addons.js"
 import { Chunk } from "@/Chunk"
-import { AirBlock, DirtBlock, GrassBlock } from "@/Block"
+import { DirtBlock, GrassBlock, StoneBlock } from "@/Block"
 import SeedGenerator from "./SeedGenerator"
+import { BlockType } from "./types/block"
 
 export class Terrain {
   /**
    * Generates terrain for a given chunk using Simplex noise.
    */
   static generate(chunk: Chunk): void {
+    this.generateResources(chunk)
+
     const { amplitude, offset, scale } = chunk.params.terrain
     const { x: chunkX, y: chunkY } = chunk.pos
 
@@ -23,6 +26,10 @@ export class Terrain {
         )
 
         for (let y = 0; y < chunk.size.height; y++) {
+          if (chunk.getBlock(x, y, z)) {
+            continue
+          }
+
           if (y < height - 1) {
             chunk.setBlock(x, y, z, new DirtBlock())
           } else if (y === height - 1) {
@@ -33,5 +40,29 @@ export class Terrain {
     }
   }
 
-  private static generateResources(chunk: Chunk) {}
+  /**
+   * Generates resources (e.g., stone blocks) in the chunk.
+   */
+  private static generateResources(chunk: Chunk) {
+    const seed = chunk.params.seed
+    const simplex = new SimplexNoise(new SeedGenerator(seed))
+
+    for (let x = 0; x < chunk.size.width; x++) {
+      for (let y = 0; y < chunk.size.height; y++) {
+        for (let z = 0; z < chunk.size.width; z++) {
+          const stoneBlock = new StoneBlock()
+
+          const value = simplex.noise3d(
+            x * stoneBlock.scale.x,
+            y * stoneBlock.scale.y,
+            z * stoneBlock.scale.z
+          )
+
+          if (value > stoneBlock.scarcity) {
+            chunk.setBlock(x, y, z, new StoneBlock())
+          }
+        }
+      }
+    }
+  }
 }

@@ -1,10 +1,11 @@
 class SeedGenerator {
   constructor(private seed: number) {}
 
+  // Linear Congruential Generator (LCG) for reproducible pseudo-random numbers
   public random(): number {
-    this.seed = Math.sin(this.seed) * 10000
-
-    return this.seed - Math.floor(this.seed)
+    // Constants for LCG (Numerical Recipes)
+    this.seed = (this.seed * 1664525 + 1013904223) % 4294967296
+    return this.seed / 4294967296
   }
 }
 
