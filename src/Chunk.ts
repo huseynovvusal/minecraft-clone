@@ -155,6 +155,21 @@ export class Chunk extends THREE.Group {
         const textures = TextureManager.getInstance().getTextures(block.blockType)
         const material = textures.map((texture) => new THREE.MeshLambertMaterial({ map: texture }))
 
+        //? Add wireframe strokes for testing
+        const wireframeMaterial = new THREE.MeshBasicMaterial({
+          color: 0x000000,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.2,
+        })
+        const wireframeMesh = new THREE.InstancedMesh(geometry, wireframeMaterial, positions.length)
+        positions.forEach((position, index) => {
+          const matrix = new THREE.Matrix4().makeTranslation(position.x, position.y, position.z)
+          wireframeMesh.setMatrixAt(index, matrix)
+        })
+        wireframeMesh.instanceMatrix.needsUpdate = true
+        this.add(wireframeMesh)
+
         const instancedMesh = new THREE.InstancedMesh(geometry, material, positions.length)
 
         instancedMesh.castShadow = true
