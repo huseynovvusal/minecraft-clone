@@ -11,9 +11,10 @@ export class Chunk extends THREE.Group {
   private blocks: BlockStorage = new BlockStorage()
 
   public size = {
-    width: 8,
-    height: 8,
+    width: 64,
+    height: 64,
   }
+
   public params = {
     terrain: {
       scale: 0.05,
@@ -81,6 +82,8 @@ export class Chunk extends THREE.Group {
       return false
     }
 
+    return true
+
     // Directions to check for neighbors: [x, y, z]
     const directions = [
       [1, 0, 0], // right (x+)
@@ -98,7 +101,7 @@ export class Chunk extends THREE.Group {
 
       const neighborBlock = this.getBlock(nx, ny, nz)
 
-      if (!neighborBlock || neighborBlock.blockType === BlockType.Air) {
+      if (!neighborBlock || neighborBlock?.blockType === BlockType.Air) {
         return true
       }
     }
