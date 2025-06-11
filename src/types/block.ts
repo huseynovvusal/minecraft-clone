@@ -5,6 +5,7 @@ export enum BlockType {
   Dirt,
   Grass,
   Stone,
+  CoalOre,
 }
 
 export interface IBlock {

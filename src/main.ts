@@ -44,6 +44,7 @@ const scene = new THREE.Scene()
 scene.background = new THREE.Color(0x87ceeb) // Sky blue background
 scene.castShadow = true
 scene.receiveShadow = true
+// scene.fog = new THREE.FogExp2(0x87ceeb, 0.02) // Fog effect
 
 // Lighting setup
 function setupLights() {

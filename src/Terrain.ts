@@ -1,6 +1,6 @@
 import { SimplexNoise } from "three/examples/jsm/Addons.js"
 import { Chunk } from "@/Chunk"
-import { DirtBlock, GrassBlock, StoneBlock } from "@/Block"
+import { AirBlock, CoalOreBlock, DirtBlock, GrassBlock, StoneBlock } from "@/Block"
 import SeedGenerator from "./SeedGenerator"
 import { BlockType } from "./types/block"
 
@@ -9,8 +9,6 @@ export class Terrain {
    * Generates terrain for a given chunk using Simplex noise.
    */
   static generate(chunk: Chunk): void {
-    this.generateResources(chunk)
-
     const { amplitude, offset, scale } = chunk.params.terrain
     const { x: chunkX, y: chunkY } = chunk.pos
 
@@ -26,18 +24,18 @@ export class Terrain {
         )
 
         for (let y = 0; y < chunk.size.height; y++) {
-          if (chunk.getBlock(x, y, z)) {
-            continue
-          }
-
           if (y < height - 1) {
             chunk.setBlock(x, y, z, new DirtBlock())
           } else if (y === height - 1) {
             chunk.setBlock(x, y, z, new GrassBlock())
+          } else {
+            chunk.setBlock(x, y, z, new AirBlock())
           }
         }
       }
     }
+
+    this.generateResources(chunk)
   }
 
   /**
@@ -50,6 +48,13 @@ export class Terrain {
     for (let x = 0; x < chunk.size.width; x++) {
       for (let y = 0; y < chunk.size.height; y++) {
         for (let z = 0; z < chunk.size.width; z++) {
+          const block = chunk.getBlock(x, y, z)
+
+          if (block && [BlockType.Air, BlockType.Grass].includes(block.blockType)) {
+            continue
+          }
+
+          const coalOreBlock = new CoalOreBlock()
           const stoneBlock = new StoneBlock()
 
           const value = simplex.noise3d(
@@ -58,8 +63,10 @@ export class Terrain {
             z * stoneBlock.scale.z
           )
 
-          if (value > stoneBlock.scarcity) {
-            chunk.setBlock(x, y, z, new StoneBlock())
+          if (value > coalOreBlock.scarcity) {
+            chunk.setBlock(x, y, z, coalOreBlock)
+          } else if (value > stoneBlock.scarcity) {
+            chunk.setBlock(x, y, z, stoneBlock)
           }
         }
       }

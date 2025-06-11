@@ -1,6 +1,6 @@
 import * as THREE from "three"
 
-import { Block } from "@/Block"
+import { AirBlock, Block } from "@/Block"
 import { Terrain } from "@/Terrain"
 import { BlockType } from "@/types/block"
 import BlockStorage from "./BlockStorage"
@@ -26,7 +26,17 @@ export class Chunk extends THREE.Group {
   constructor() {
     super()
 
+    // Generate the chunk immediately
     this.generate()
+
+    //TODO: Use an additional method
+    for (let x = 0; x < this.size.width; x++) {
+      for (let y = 0; y < this.size.height; y++) {
+        for (let z = 0; z < this.size.width; z++) {
+          this.blocks.setBlock(x, y, z, new AirBlock())
+        }
+      }
+    }
   }
 
   public getBlock(x: number, y: number, z: number): Block | null {
@@ -107,6 +117,7 @@ export class Chunk extends THREE.Group {
       [BlockType.Dirt]: [],
       [BlockType.Stone]: [],
       [BlockType.Air]: [],
+      [BlockType.CoalOre]: [],
     }
 
     //! Measure performance

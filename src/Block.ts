@@ -31,6 +31,12 @@ export class GrassBlock extends Block {
 
 export class StoneBlock extends Block {
   constructor() {
-    super(BlockType.Stone, true, { x: 0.045, y: 0.05, z: 0.055 }, 0.5)
+    super(BlockType.Stone, true, { x: 0.06, y: 0.075, z: 0.05 }, 0.1)
+  }
+}
+
+export class CoalOreBlock extends Block {
+  constructor() {
+    super(BlockType.CoalOre, true, { x: 0.1, y: 0.05, z: 0.1 }, 0.25)
   }
 }

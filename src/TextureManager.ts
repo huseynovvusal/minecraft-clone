@@ -37,6 +37,14 @@ const TEXTURE_MAP: TBlockTextureMap = {
     front: "/textures/blocks/stone.png",
     back: "/textures/blocks/stone.png",
   },
+  [BlockType.CoalOre]: {
+    top: "/textures/blocks/coal_ore.png",
+    bottom: "/textures/blocks/coal_ore.png",
+    left: "/textures/blocks/coal_ore.png",
+    right: "/textures/blocks/coal_ore.png",
+    front: "/textures/blocks/coal_ore.png",
+    back: "/textures/blocks/coal_ore.png",
+  },
 }
 
 const blockFaces: TBlockFace[] = ["right", "left", "top", "bottom", "front", "back"]
