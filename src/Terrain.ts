@@ -1,6 +1,6 @@
 import { SimplexNoise } from "three/examples/jsm/Addons.js"
 import { Chunk } from "@/Chunk"
-import { AirBlock, DirtBlock, GrassBlock, StoneBlock } from "@/Block"
+import { AirBlock, CoalOreBlock, DirtBlock, GrassBlock, IronOreBlock, StoneBlock } from "@/Block"
 import SeedGenerator from "./SeedGenerator"
 import { BlockType } from "./types/block"
 
@@ -25,7 +25,11 @@ export class Terrain {
 
         for (let y = 0; y < chunk.size.height; y++) {
           if (y < height - 1) {
-            chunk.setBlock(x, y, z, new DirtBlock())
+            if (y / height < 0.75) {
+              chunk.setBlock(x, y, z, new StoneBlock())
+            } else {
+              chunk.setBlock(x, y, z, new DirtBlock())
+            }
           } else if (y === height - 1) {
             chunk.setBlock(x, y, z, new GrassBlock())
           } else {
@@ -48,22 +52,53 @@ export class Terrain {
     for (let x = 0; x < chunk.size.width; x++) {
       for (let y = 0; y < chunk.size.height; y++) {
         for (let z = 0; z < chunk.size.width; z++) {
-          const block = chunk.getBlock(x, y, z)
+          for (const blockType of [BlockType.CoalOre, BlockType.IronOre]) {
+            const block = chunk.getBlock(x, y, z)
 
-          if (block && [BlockType.Air, BlockType.Grass].includes(block.blockType)) {
-            continue
-          }
+            if (block && [BlockType.Air, BlockType.Grass].includes(block.blockType)) {
+              continue
+            }
 
-          const stoneBlock = new StoneBlock()
+            switch (blockType) {
+              case BlockType.CoalOre: {
+                const coalOreBlock = new CoalOreBlock()
+                const value = simplex.noise3d(
+                  x * coalOreBlock.scale.x,
+                  y * coalOreBlock.scale.y,
+                  z * coalOreBlock.scale.z
+                )
+                if (value > coalOreBlock.scarcity) {
+                  chunk.setBlock(x, y, z, coalOreBlock)
+                }
+                break
+              }
+              case BlockType.IronOre: {
+                const ironOreBlock = new IronOreBlock()
+                const value = simplex.noise3d(
+                  x * ironOreBlock.scale.x,
+                  y * ironOreBlock.scale.y,
+                  z * ironOreBlock.scale.z
+                )
+                if (value > ironOreBlock.scarcity) {
+                  chunk.setBlock(x, y, z, ironOreBlock)
+                }
+                break
+              }
+              default:
+                break
+            }
 
-          const value = simplex.noise3d(
-            x * stoneBlock.scale.x,
-            y * stoneBlock.scale.y,
-            z * stoneBlock.scale.z
-          )
+            // const coalOreBlock = new CoalOreBlock()
 
-          if (value > stoneBlock.scarcity) {
-            chunk.setBlock(x, y, z, stoneBlock)
+            // const value = simplex.noise3d(
+            //   x * coalOreBlock.scale.x,
+            //   y * coalOreBlock.scale.y,
+            //   z * coalOreBlock.scale.z
+            // )
+
+            // if (value > coalOreBlock.scarcity) {
+            //   chunk.setBlock(x, y, z, coalOreBlock)
+            // }
           }
         }
       }

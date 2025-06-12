@@ -11,14 +11,14 @@ export class Chunk implements IChunk {
 
   public size = {
     width: 64,
-    height: 32,
+    height: 128,
   }
   public params = {
     seed: 0,
     terrain: {
-      scale: 0.05,
-      amplitude: 5,
-      offset: 10,
+      scale: 0.02,
+      amplitude: 20,
+      offset: 20,
     },
   }
 

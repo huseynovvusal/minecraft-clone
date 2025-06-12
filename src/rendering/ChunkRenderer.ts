@@ -25,6 +25,7 @@ class ChunkRenderer extends THREE.Group {
       [BlockType.Stone]: [],
       [BlockType.Air]: [],
       [BlockType.CoalOre]: [],
+      [BlockType.IronOre]: [],
     }
 
     //! Measure performance
