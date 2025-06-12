@@ -1,25 +1,17 @@
 import * as THREE from "three"
 
-import { AirBlock, Block } from "@/Block"
+import { Block } from "@/Block"
 import { Terrain } from "@/Terrain"
 import { BlockType } from "@/types/block"
 import BlockStorage from "./BlockStorage"
-import TextureManager from "./TextureManager"
 
-export class Chunk extends THREE.Group {
+export class Chunk {
   public readonly pos: THREE.Vector2 = new THREE.Vector2(0, 0)
 
   public size = {
     width: 64,
     height: 32,
   }
-
-  private blocks: BlockStorage = new BlockStorage(
-    this.size.width,
-    this.size.height,
-    this.size.width
-  )
-
   public params = {
     seed: 0,
     terrain: {
@@ -29,22 +21,15 @@ export class Chunk extends THREE.Group {
     },
   }
 
-  constructor() {
-    super()
+  private blocks: BlockStorage = new BlockStorage(
+    this.size.width,
+    this.size.height,
+    this.size.width
+  )
 
-    // Generate the chunk immediately
-    this.generate()
-
-    //TODO: Use an additional method
-    for (let x = 0; x < this.size.width; x++) {
-      for (let y = 0; y < this.size.height; y++) {
-        for (let z = 0; z < this.size.width; z++) {
-          this.blocks.setBlock(x, y, z, new AirBlock())
-        }
-      }
-    }
-  }
-
+  /**
+   * This method clears previous blocks and fills the terrain anew.
+   */
   public getBlock(x: number, y: number, z: number): Block | null {
     if (
       x < 0 ||
@@ -63,6 +48,9 @@ export class Chunk extends THREE.Group {
     return this.blocks.getBlock(x, y, z) || null
   }
 
+  /**
+   * Sets a block at the specified coordinates in the chunk.
+   */
   public setBlock(x: number, y: number, z: number, block: Block): void {
     if (
       x < 0 ||
@@ -79,10 +67,18 @@ export class Chunk extends THREE.Group {
     // this.blocks[x][y][z] = block
   }
 
+  /**
+   * Fills the chunk with terrain blocks based on the parameters.
+   * This method uses the Terrain class to generate the terrain.
+   */
   public fillTerrain() {
     Terrain.generate(this)
   }
 
+  /**
+   * Checks if a block at the specified coordinates is visible.
+   * A block is considered visible if it is not air and has at least one neighbor that is air.
+   */
   public isBlockVisible(x: number, y: number, z: number): boolean {
     const block = this.getBlock(x, y, z)
 
@@ -115,85 +111,19 @@ export class Chunk extends THREE.Group {
     return false
   }
 
-  private generateMeshes(): void {
-    this.clear() // Clear previous meshes if any
-
-    const blockTypeToPositions: Record<BlockType, THREE.Vector3[]> = {
-      [BlockType.Grass]: [],
-      [BlockType.Dirt]: [],
-      [BlockType.Stone]: [],
-      [BlockType.Air]: [],
-      [BlockType.CoalOre]: [],
-    }
-
-    //! Measure performance
-    const start = performance.now()
-
-    // Initialize positions for each block type
-    for (let x = 0; x < this.size.width; x++) {
-      for (let y = 0; y < this.size.height; y++) {
-        for (let z = 0; z < this.size.width; z++) {
-          const block = this.getBlock(x, y, z)
-
-          if (!block || !this.isBlockVisible(x, y, z)) continue
-
-          blockTypeToPositions[block.blockType].push(new THREE.Vector3(x, y, z))
-        }
-      }
-    }
-
-    for (const blockType in blockTypeToPositions) {
-      const positions = blockTypeToPositions[blockType as unknown as BlockType]
-
-      if (positions.length > 0) {
-        const { x, y, z } = positions[0]
-        const block = this.getBlock(x, y, z)
-
-        if (!block) continue
-
-        const geometry = new THREE.BoxGeometry(1, 1, 1)
-        const textures = TextureManager.getInstance().getTextures(block.blockType)
-        const material = textures.map((texture) => new THREE.MeshLambertMaterial({ map: texture }))
-
-        //? Add wireframe strokes for testing
-        const wireframeMaterial = new THREE.MeshBasicMaterial({
-          color: 0x000000,
-          wireframe: true,
-          transparent: true,
-          opacity: 0.2,
-        })
-        const wireframeMesh = new THREE.InstancedMesh(geometry, wireframeMaterial, positions.length)
-        positions.forEach((position, index) => {
-          const matrix = new THREE.Matrix4().makeTranslation(position.x, position.y, position.z)
-          wireframeMesh.setMatrixAt(index, matrix)
-        })
-        wireframeMesh.instanceMatrix.needsUpdate = true
-        this.add(wireframeMesh)
-
-        const instancedMesh = new THREE.InstancedMesh(geometry, material, positions.length)
-
-        instancedMesh.castShadow = true
-        instancedMesh.receiveShadow = true
-
-        positions.forEach((position, index) => {
-          const matrix = new THREE.Matrix4().makeTranslation(position.x, position.y, position.z)
-          instancedMesh.setMatrixAt(index, matrix)
-        })
-
-        instancedMesh.instanceMatrix.needsUpdate = true
-
-        this.add(instancedMesh)
-      }
-    }
-
-    // !
-    const end = performance.now()
-    console.log(`Chunk generated in ${end - start} ms`)
+  /**
+   * Clears all blocks in the chunk.
+   */
+  public clear() {
+    this.blocks.clear()
   }
 
+  /**
+   * Generates the terrain for the chunk based on the parameters.
+   * This method clears previous blocks and fills the terrain anew.
+   */
   public generate() {
     this.blocks.clear() // Clear previous blocks
     this.fillTerrain()
-    this.generateMeshes()
   }
 }

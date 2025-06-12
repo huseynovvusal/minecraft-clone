@@ -4,10 +4,10 @@ class BlockStorage {
   private block: Block[][][] = []
 
   constructor(private readonly x: number, private readonly y: number, private readonly z: number) {
-    this.initialize(x, y, z)
+    this.initialize()
   }
 
-  public initialize(x: number, y: number, z: number): void {
+  private initialize(): void {
     for (let i = 0; i < this.x; i++) {
       this.block[i] = []
       for (let j = 0; j < this.y; j++) {
@@ -49,7 +49,7 @@ class BlockStorage {
   }
 
   public clear(): void {
-    this.initialize(this.x, this.y, this.z)
+    this.initialize()
   }
 }
 

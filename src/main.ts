@@ -5,10 +5,11 @@ import Stats from "three/examples/jsm/libs/stats.module.js"
 import "@/styles/style.css"
 
 import { Chunk } from "@/Chunk"
-import { createGUI } from "@/GUI"
+import { createGUI } from "@/ui/GUI"
 import TextureManager from "./TextureManager"
+import { ChunkRenderer } from "./rendering/ChunkRenderer"
 
-//
+// TextureManager initialization
 await TextureManager.getInstance()
   .loadTextures()
   .then(() => {
@@ -78,7 +79,10 @@ function setupLights() {
 
 //! Initialize and generate a chunk
 const chunk = new Chunk()
-scene.add(chunk)
+chunk.generate()
+const chunkRenderer = new ChunkRenderer(chunk)
+chunkRenderer.render()
+scene.add(chunkRenderer)
 
 // Render loop
 function animate() {
