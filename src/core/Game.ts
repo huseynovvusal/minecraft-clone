@@ -27,7 +27,8 @@ class Game {
   }
 
   private setupCamera(): void {
-    this.camera.position.set(32, 32, 32)
+    this.camera.position.set(128, 128, 128)
+    this.camera.lookAt(new THREE.Vector3(0, 0, 0))
   }
 
   private setupStats(): void {

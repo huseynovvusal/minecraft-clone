@@ -57,7 +57,7 @@ class ChunkRenderer extends THREE.Group {
         const material = textures.map((texture) => new THREE.MeshLambertMaterial({ map: texture }))
 
         //? Add wireframe strokes for testing
-        this.addWireframeStrokes(geometry, positions)
+        // this.addWireframeStrokes(geometry, positions)
 
         const instancedMesh = new THREE.InstancedMesh(geometry, material, positions.length)
 

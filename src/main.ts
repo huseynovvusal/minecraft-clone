@@ -26,4 +26,4 @@ game.scene.add(chunkRenderer)
 // Start the game loop
 game.start()
 
-createGUI(chunk)
+createGUI(chunk, chunkRenderer)

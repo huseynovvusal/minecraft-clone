@@ -1,7 +1,8 @@
 import { GUI } from "three/addons/libs/lil-gui.module.min.js"
 import type { Chunk } from "@/Chunk"
+import type { ChunkRenderer } from "@/rendering/ChunkRenderer"
 
-export function createGUI(chunk: Chunk) {
+export function createGUI(chunk: Chunk, chunkRenderer: ChunkRenderer): void {
   const gui = new GUI()
 
   const terrainFolder = gui.addFolder("Terrain Parameters")
@@ -12,5 +13,6 @@ export function createGUI(chunk: Chunk) {
 
   gui.onChange(() => {
     chunk.generate()
+    chunkRenderer.render()
   })
 }

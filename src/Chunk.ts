@@ -4,8 +4,9 @@ import { Block } from "@/Block"
 import { Terrain } from "@/Terrain"
 import { BlockType } from "@/types/block"
 import BlockStorage from "./BlockStorage"
+import type { IChunk } from "./types/chunk"
 
-export class Chunk {
+export class Chunk implements IChunk {
   public readonly pos: THREE.Vector2 = new THREE.Vector2(0, 0)
 
   public size = {
@@ -68,14 +69,6 @@ export class Chunk {
   }
 
   /**
-   * Fills the chunk with terrain blocks based on the parameters.
-   * This method uses the Terrain class to generate the terrain.
-   */
-  public fillTerrain() {
-    Terrain.generate(this)
-  }
-
-  /**
    * Checks if a block at the specified coordinates is visible.
    * A block is considered visible if it is not air and has at least one neighbor that is air.
    */
@@ -124,6 +117,6 @@ export class Chunk {
    */
   public generate() {
     this.blocks.clear() // Clear previous blocks
-    this.fillTerrain()
+    Terrain.generate(this)
   }
 }
