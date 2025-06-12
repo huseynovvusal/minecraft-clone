@@ -24,7 +24,7 @@ export class Terrain {
         )
 
         for (let y = 0; y < chunk.size.height; y++) {
-          if (y < height - 1) {
+          if (y < height - 1 || y < height - 5) {
             if (y / height < 0.75) {
               chunk.setBlock(x, y, z, new StoneBlock())
             } else {

@@ -55,7 +55,9 @@ class ChunkRenderer extends THREE.Group {
 
         const geometry = new THREE.BoxGeometry(1, 1, 1)
         const textures = TextureManager.getInstance().getTextures(block.blockType)
-        const material = textures.map((texture) => new THREE.MeshLambertMaterial({ map: texture }))
+        const material = textures.map(
+          (texture) => new THREE.MeshLambertMaterial({ map: texture, side: THREE.FrontSide })
+        )
 
         //? Add wireframe strokes for testing
         // this.addWireframeStrokes(geometry, positions)

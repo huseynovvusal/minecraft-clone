@@ -11,7 +11,7 @@ export class Chunk implements IChunk {
 
   public size = {
     width: 64,
-    height: 128,
+    height: 32,
   }
   public params = {
     seed: 0,
