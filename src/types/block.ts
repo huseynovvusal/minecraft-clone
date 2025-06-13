@@ -19,3 +19,13 @@ export interface IBlock {
   }
   scarcity?: number
 }
+
+export type TBlockFace = "top" | "bottom" | "left" | "right" | "front" | "back"
+
+export type TBlockTextures = {
+  [face in TBlockFace]: string
+}
+
+export type TBlockTextureMap = {
+  [key in BlockType]: TBlockTextures | undefined
+}
