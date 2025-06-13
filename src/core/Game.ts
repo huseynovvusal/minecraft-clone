@@ -9,6 +9,7 @@ import Stats from "three/examples/jsm/libs/stats.module.js"
 class Game {
   public readonly renderer = new THREE.WebGLRenderer()
   public readonly camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight)
+  //@ts-ignore
   private readonly controls = new OrbitControls(this.camera, this.renderer.domElement)
   public readonly scene = new THREE.Scene()
   public readonly stats = new Stats()

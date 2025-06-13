@@ -3,6 +3,7 @@ import { Chunk } from "@/Chunk"
 import { AirBlock, CoalOreBlock, DirtBlock, GrassBlock, IronOreBlock, StoneBlock } from "@/Block"
 import SeedGenerator from "./SeedGenerator"
 import { BlockType } from "./types/block"
+import { RESOURCES } from "./constants/resources"
 
 /**
  * Terrain class responsible for generating terrain and resources in a chunk.
@@ -64,7 +65,7 @@ export class Terrain {
     for (let x = 0; x < chunk.size.width; x++) {
       for (let y = 0; y < chunk.size.height; y++) {
         for (let z = 0; z < chunk.size.width; z++) {
-          for (const blockType of [BlockType.CoalOre, BlockType.IronOre]) {
+          for (const blockType of RESOURCES) {
             const block = chunk.getBlock(x, y, z)
 
             // Skip if the block is air or grass
