@@ -20,7 +20,16 @@ class BlockStorage {
   }
 
   public getBlock(x: number, y: number, z: number): Block | undefined {
-    if (this.block[x] && this.block[x][y] && this.block[x][y][z] !== undefined) {
+    if (
+      x >= 0 &&
+      x < this.x &&
+      y >= 0 &&
+      y < this.y &&
+      z >= 0 &&
+      z < this.z &&
+      this.block[x] &&
+      this.block[x][y]
+    ) {
       return this.block[x][y][z];
     }
     return undefined;
