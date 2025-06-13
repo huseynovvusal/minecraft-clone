@@ -1,6 +1,6 @@
 import * as THREE from "three"
 
-import { Chunk } from "@/Chunk"
+import { Chunk } from "@/world/Chunk"
 import { BlockType } from "@/types/block"
 import TextureManager from "@/TextureManager"
 

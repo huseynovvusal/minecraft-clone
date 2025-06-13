@@ -1,5 +1,5 @@
 import { SimplexNoise } from "three/examples/jsm/Addons.js"
-import { Chunk } from "@/Chunk"
+import { Chunk } from "@/world/Chunk"
 import { AirBlock, CoalOreBlock, DirtBlock, GrassBlock, IronOreBlock, StoneBlock } from "@/Block"
 import SeedGenerator from "./SeedGenerator"
 import { BlockType } from "./types/block"

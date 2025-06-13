@@ -1,5 +1,5 @@
 import { GUI } from "three/addons/libs/lil-gui.module.min.js"
-import type { Chunk } from "@/Chunk"
+import type { Chunk } from "@/world/Chunk"
 import type { ChunkRenderer } from "@/rendering/ChunkRenderer"
 
 export function createGUI(chunk: Chunk, chunkRenderer: ChunkRenderer): void {

@@ -3,8 +3,8 @@ import * as THREE from "three"
 import { Block } from "@/Block"
 import { Terrain } from "@/Terrain"
 import { BlockType } from "@/types/block"
-import BlockStorage from "./BlockStorage"
-import type { IChunk } from "./types/chunk"
+import BlockStorage from "../BlockStorage"
+import type { IChunk } from "../types/chunk"
 
 /**
  * Chunk class represents a section of the game world containing blocks.

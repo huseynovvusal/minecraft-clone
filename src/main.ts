@@ -1,6 +1,6 @@
 import "@/styles/style.css"
 
-import { Chunk } from "@/Chunk"
+import { Chunk } from "@/world/Chunk"
 import { createGUI } from "@/ui/GUI"
 import TextureManager from "./TextureManager"
 import { ChunkRenderer } from "./rendering/ChunkRenderer"
