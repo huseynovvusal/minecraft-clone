@@ -4,9 +4,13 @@ import { AirBlock, CoalOreBlock, DirtBlock, GrassBlock, IronOreBlock, StoneBlock
 import SeedGenerator from "./SeedGenerator"
 import { BlockType } from "./types/block"
 
+/**
+ * Terrain class responsible for generating terrain and resources in a chunk.
+ * It uses Simplex noise to create realistic terrain features.
+ */
 export class Terrain {
   /**
-   * Generates terrain for a given chunk using Simplex noise.
+   * Generates the terrain and resources for the given chunk.
    */
   static generate(chunk: Chunk): void {
     // Generate the base terrain
@@ -35,7 +39,7 @@ export class Terrain {
 
         for (let y = 0; y < chunk.size.height; y++) {
           if (y < height - 1 || y < height - 5) {
-            if (y / height < 0.75) {
+            if (y / height < 0.75 + Math.random() * 0.1) {
               chunk.setBlock(x, y, z, new StoneBlock())
             } else {
               chunk.setBlock(x, y, z, new DirtBlock())

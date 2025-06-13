@@ -6,6 +6,10 @@ import { BlockType } from "@/types/block"
 import BlockStorage from "./BlockStorage"
 import type { IChunk } from "./types/chunk"
 
+/**
+ * Chunk class represents a section of the game world containing blocks.
+ * It provides methods to manage blocks, generate terrain, and check block visibility.
+ */
 export class Chunk implements IChunk {
   public readonly pos: THREE.Vector2 = new THREE.Vector2(0, 0)
 

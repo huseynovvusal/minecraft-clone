@@ -1,5 +1,10 @@
 import { BlockType, type IBlock } from "@/types/block"
 
+/**
+ * Block class represents a single block in the game world.
+ * It contains properties such as block type, solidity, scale, and scarcity.
+ * It also provides methods to create specific types of blocks like Air, Dirt, Grass, etc.
+ */
 export class Block implements IBlock {
   static SIZE = 1
 
