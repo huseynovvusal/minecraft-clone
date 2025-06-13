@@ -1,4 +1,4 @@
-export type TBloockCoord = `${number},${number},${number}`
+export type TBloockCoord = `${number},${number},${number}`;
 
 export enum BlockType {
   Air,
@@ -10,22 +10,22 @@ export enum BlockType {
 }
 
 export interface IBlock {
-  blockType: BlockType
-  isSolid: boolean
+  blockType: BlockType;
+  isSolid: boolean;
   scale?: {
-    x: number
-    y: number
-    z: number
-  }
-  scarcity?: number
+    x: number;
+    y: number;
+    z: number;
+  };
+  scarcity?: number;
 }
 
-export type TBlockFace = "top" | "bottom" | "left" | "right" | "front" | "back"
+export type TBlockFace = 'top' | 'bottom' | 'left' | 'right' | 'front' | 'back';
 
 export type TBlockTextures = {
-  [face in TBlockFace]: string
-}
+  [face in TBlockFace]: string;
+};
 
 export type TBlockTextureMap = {
-  [key in BlockType]: TBlockTextures | undefined
-}
+  [key in BlockType]: TBlockTextures | undefined;
+};
