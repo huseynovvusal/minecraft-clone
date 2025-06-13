@@ -9,6 +9,16 @@ export class Terrain {
    * Generates terrain for a given chunk using Simplex noise.
    */
   static generate(chunk: Chunk): void {
+    // Generate the base terrain
+    this.generateBaseTerrain(chunk)
+    // Generate resources like coal and iron ores
+    this.generateResources(chunk)
+  }
+
+  /**
+   * Generates the base terrain for the chunk.
+   */
+  private static generateBaseTerrain(chunk: Chunk) {
     const { amplitude, offset, scale } = chunk.params.terrain
     const { x: chunkX, y: chunkY } = chunk.pos
 
@@ -38,8 +48,6 @@ export class Terrain {
         }
       }
     }
-
-    this.generateResources(chunk)
   }
 
   /**
@@ -55,6 +63,7 @@ export class Terrain {
           for (const blockType of [BlockType.CoalOre, BlockType.IronOre]) {
             const block = chunk.getBlock(x, y, z)
 
+            // Skip if the block is air or grass
             if (block && [BlockType.Air, BlockType.Grass].includes(block.blockType)) {
               continue
             }
@@ -87,18 +96,6 @@ export class Terrain {
               default:
                 break
             }
-
-            // const coalOreBlock = new CoalOreBlock()
-
-            // const value = simplex.noise3d(
-            //   x * coalOreBlock.scale.x,
-            //   y * coalOreBlock.scale.y,
-            //   z * coalOreBlock.scale.z
-            // )
-
-            // if (value > coalOreBlock.scarcity) {
-            //   chunk.setBlock(x, y, z, coalOreBlock)
-            // }
           }
         }
       }
