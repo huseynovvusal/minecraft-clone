@@ -1,3 +1,4 @@
+import { Player } from '@/Player';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import Stats from 'three/examples/jsm/libs/stats.module.js';
@@ -13,12 +14,21 @@ class Game {
   public readonly scene = new THREE.Scene();
   public readonly stats = new Stats();
 
+  private player: Player;
+
+  private readonly clock = new THREE.Clock();
+  private deltaTime: number = 0;
+
   constructor() {
     this.setupRenderer();
     this.setupCamera();
     this.setupStats();
     this.setupScene();
     this.setupLights();
+
+    // Initialize player
+    this.player = new Player(this);
+    this.player.initialize();
   }
 
   /**
@@ -98,7 +108,13 @@ class Game {
   public update(): void {
     requestAnimationFrame(() => this.update());
 
+    this.deltaTime = this.clock.getDelta();
+
     this.stats.begin();
+
+    if (this.player) {
+      this.player.update(this.deltaTime);
+    }
 
     this.renderer.render(this.scene, this.camera);
 
