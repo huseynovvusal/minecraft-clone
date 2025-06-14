@@ -67,7 +67,7 @@ class Game {
     this.scene.background = new THREE.Color(0x87ceeb); // Sky blue background
     this.scene.castShadow = true;
     this.scene.receiveShadow = true;
-    // this.scene.fog = new THREE.FogExp2(0x87ceeb, 0.02) // Fog effect
+    // this.scene.fog = new THREE.FogExp2(0x87ceeb, 0.025); // Fog effect
   }
 
   /**

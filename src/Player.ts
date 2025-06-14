@@ -30,6 +30,9 @@ export class Player {
   private canJump: boolean = true;
   private isFlying: boolean = false;
 
+  // Helpers
+  private cameraController: THREE.CameraHelper;
+
   constructor(game: Game) {
     this.game = game;
     // this.camera = game.camera;
@@ -46,6 +49,10 @@ export class Player {
     });
 
     this.setupKeyboardControls();
+
+    //! Add camera helper for debugging (optional)
+    this.cameraController = new THREE.CameraHelper(this.camera);
+    this.game.scene.add(this.cameraController);
   }
 
   private setupKeyboardControls(): void {
