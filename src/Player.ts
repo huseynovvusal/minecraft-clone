@@ -4,7 +4,7 @@ import Game from '@/core/Game';
 
 export class Player {
   private readonly game: Game;
-  public readonly camera: THREE.Camera;
+  public readonly camera: THREE.PerspectiveCamera;
   public readonly controls: PointerLockControls;
 
   // Player properties

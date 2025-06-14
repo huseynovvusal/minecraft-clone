@@ -129,8 +129,14 @@ class Game {
    * Handles window resize events to adjust camera and renderer settings.
    */
   public onWindowResize(): void {
+    // Update orbit camera aspect ratio
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
+
+    // Update player camera aspect ratio
+    this.player.camera.aspect = window.innerWidth / window.innerHeight;
+    this.player.camera.updateProjectionMatrix();
+
     this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
 
