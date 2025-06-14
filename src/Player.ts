@@ -155,7 +155,7 @@ export class Player {
     // Apply movement speed
     this.direction.multiplyScalar(this.speed * deltaTime);
 
-    //TODO: Apply physics or flight mode
+    //TODO: Seperate concerns for movement and physics
     if (this.isFlying) {
       // Flying mode: apply vertical movement
       if (this.isMovingUp) {
