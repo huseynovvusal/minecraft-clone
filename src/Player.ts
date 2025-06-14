@@ -4,8 +4,8 @@ import Game from '@/core/Game';
 
 export class Player {
   private readonly game: Game;
-  private readonly camera: THREE.Camera;
-  private readonly controls: PointerLockControls;
+  public readonly camera: THREE.Camera;
+  public readonly controls: PointerLockControls;
 
   // Player properties
   private position: THREE.Vector3;
@@ -31,7 +31,9 @@ export class Player {
 
   constructor(game: Game) {
     this.game = game;
-    this.camera = game.camera;
+    // this.camera = game.camera;
+    this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight);
+    this.camera.position.set(10, 25, 10);
     this.position = this.camera.position.clone();
 
     // Initialize Pointer Lock Controls

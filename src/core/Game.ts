@@ -116,7 +116,11 @@ class Game {
       this.player.update(this.deltaTime);
     }
 
-    this.renderer.render(this.scene, this.camera);
+    if (this.player.controls.isLocked) {
+      this.renderer.render(this.scene, this.player.camera);
+    } else {
+      this.renderer.render(this.scene, this.camera);
+    }
 
     this.stats.end();
   }
