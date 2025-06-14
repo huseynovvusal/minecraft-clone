@@ -128,6 +128,9 @@ export class Player {
   public update(deltaTime: number): void {
     if (!this.controls.isLocked) return;
 
+    //! Update UI
+    this.updateUI();
+
     const cameraDirection = new THREE.Vector3();
     this.camera.getWorldDirection(cameraDirection);
 
@@ -196,6 +199,13 @@ export class Player {
 
   public getPosition(): THREE.Vector3 {
     return this.position.clone();
+  }
+
+  //! For debugging purposes, update the UI with player position
+  public updateUI(): void {
+    const { x, y, z } = this.getPosition();
+    const positionText = `X: ${x.toFixed(2)}, Y: ${y.toFixed(2)}, Z: ${z.toFixed(2)}`;
+    document.querySelector('.player-position')!.textContent = positionText;
   }
 
   public initialize(): void {
