@@ -11,6 +11,7 @@ export class Player {
   private position: THREE.Vector3;
   private velocity: THREE.Vector3 = new THREE.Vector3(0, 0, 0);
   private direction: THREE.Vector3 = new THREE.Vector3();
+  private mass: number = 2.5; // Mass for physics calculations, if needed
 
   // Movement state
   private isMovingForward: boolean = false;
@@ -155,6 +156,19 @@ export class Player {
     this.direction.multiplyScalar(this.speed * deltaTime);
 
     //TODO: Apply physics or flight mode
+    if (this.isFlying) {
+      // Flying mode: apply vertical movement
+      if (this.isMovingUp) {
+        this.velocity.y = this.speed * deltaTime;
+      } else if (this.isMovingDown) {
+        this.velocity.y = -this.speed * deltaTime;
+      } else {
+        this.velocity.y = 0; // No vertical movement
+      }
+    } else {
+      // Gravity effect when not flying
+      this.velocity.y -= this.gravity * deltaTime * this.mass;
+    }
 
     // Horizontal movement
     this.camera.position.x += this.direction.x;
@@ -163,7 +177,12 @@ export class Player {
     // Vertical movement
     this.camera.position.y += this.velocity.y * deltaTime;
 
-    //TODO: Ground collision detection
+    //TODO: Ground collision detection (basic)
+    if (this.camera.position.y < 25) {
+      this.camera.position.y = 25; // Reset to ground level
+      this.canJump = true; // Allow jumping again
+      this.velocity.y = 0; // Reset vertical velocity
+    }
 
     this.position.copy(this.camera.position);
   }
