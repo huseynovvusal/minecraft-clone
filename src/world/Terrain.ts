@@ -2,8 +2,8 @@ import { SimplexNoise } from 'three/examples/jsm/Addons.js';
 import { Chunk } from '@/world/Chunk';
 import { AirBlock, CoalOreBlock, DirtBlock, GrassBlock, IronOreBlock, StoneBlock } from '@/Block';
 import SeedGenerator from './SeedGenerator';
-import { BlockType } from './types/block';
-import { RESOURCES } from './constants/resources';
+import { BlockType } from '../types/block';
+import { RESOURCES } from '../constants/resources';
 
 /**
  * Terrain class responsible for generating terrain and resources in a chunk.

@@ -2,7 +2,7 @@ import '@/styles/style.css';
 
 import { Chunk } from '@/world/Chunk';
 import { createGUI } from '@/ui/GUI';
-import TextureManager from './TextureManager';
+import TextureManager from './rendering/TextureManager';
 import { ChunkRenderer } from './rendering/ChunkRenderer';
 import Game from './core/Game';
 

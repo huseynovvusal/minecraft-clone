@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { BlockType } from './types/block';
-import { BLOCK_FACES, TEXTURE_MAP } from './constants/texture';
+import { BlockType } from '../types/block';
+import { BLOCK_FACES, TEXTURE_MAP } from '../constants/texture';
 
 class TextureManager {
   private static instance: TextureManager | undefined = undefined;
@@ -23,7 +23,9 @@ class TextureManager {
         const textureArray: THREE.Texture[] = [];
 
         for (const face of BLOCK_FACES) {
-          const texture = await new THREE.TextureLoader().loadAsync(textures[face as keyof typeof textures]);
+          const texture = await new THREE.TextureLoader().loadAsync(
+            textures[face as keyof typeof textures]
+          );
 
           texture.magFilter = THREE.NearestFilter;
           texture.minFilter = THREE.NearestFilter;

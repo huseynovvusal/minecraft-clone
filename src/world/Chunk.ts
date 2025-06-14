@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 import { Block } from '@/Block';
-import { Terrain } from '@/Terrain';
+import { Terrain } from '@/world/Terrain';
 import { BlockType } from '@/types/block';
 import BlockStorage from '../BlockStorage';
 import type { IChunk } from '../types/chunk';
@@ -26,13 +26,24 @@ export class Chunk implements IChunk {
     },
   };
 
-  private blocks: BlockStorage = new BlockStorage(this.size.width, this.size.height, this.size.width);
+  private blocks: BlockStorage = new BlockStorage(
+    this.size.width,
+    this.size.height,
+    this.size.width
+  );
 
   /**
    * This method clears previous blocks and fills the terrain anew.
    */
   public getBlock(x: number, y: number, z: number): Block | null {
-    if (x < 0 || x >= this.size.width || y < 0 || y >= this.size.height || z < 0 || z >= this.size.width) {
+    if (
+      x < 0 ||
+      x >= this.size.width ||
+      y < 0 ||
+      y >= this.size.height ||
+      z < 0 ||
+      z >= this.size.width
+    ) {
       // throw new Error("Block coordinates out of bounds")
       // console.warn(`Block coordinates out of bounds: (${x}, ${y}, ${z})`)
 
@@ -46,7 +57,14 @@ export class Chunk implements IChunk {
    * Sets a block at the specified coordinates in the chunk.
    */
   public setBlock(x: number, y: number, z: number, block: Block): void {
-    if (x < 0 || x >= this.size.width || y < 0 || y >= this.size.height || z < 0 || z >= this.size.width) {
+    if (
+      x < 0 ||
+      x >= this.size.width ||
+      y < 0 ||
+      y >= this.size.height ||
+      z < 0 ||
+      z >= this.size.width
+    ) {
       throw new Error('Block coordinates out of bounds');
     }
 
