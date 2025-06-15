@@ -5,7 +5,7 @@ class PlayerRenderer extends THREE.Group {
   private player: Player;
 
   // Helpers
-  private cameraHelper: THREE.CameraHelper;
+  public cameraHelper: THREE.CameraHelper;
 
   // Player body representation
   private playerBody!: THREE.Group;
@@ -15,7 +15,7 @@ class PlayerRenderer extends THREE.Group {
     this.player = player;
 
     // Add the camera which is already positioned at eye level by the Player class
-    this.add(this.player.camera);
+    // this.add(this.player.camera);
 
     // Position the renderer at the player's feet position
     this.position.copy(this.player.position);
@@ -25,7 +25,7 @@ class PlayerRenderer extends THREE.Group {
 
     // Initialize camera helper for debugging (optional)
     this.cameraHelper = new THREE.CameraHelper(this.player.camera);
-    this.add(this.cameraHelper);
+    // this.add(this.cameraHelper);
 
     this.createPlayerBody();
   }

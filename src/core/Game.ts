@@ -38,6 +38,7 @@ class Game {
 
     // Add the player's controls object to the scene
     this.scene.add(this.player.controls.getObject());
+    this.scene.add(this.playerRenderer.cameraHelper);
   }
 
   /**
