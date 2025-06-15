@@ -48,14 +48,11 @@ class PlayerRenderer extends THREE.Group {
     const cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
 
     // Since cylinder origin is at center, offset it up by half height
-    // to make bottom of cylinder align with 0,0,0
     cylinder.position.y = height / 2;
 
     this.playerBody = new THREE.Group();
     this.playerBody.add(cylinder);
 
-    // Position player body at (0,0,0) relative to the renderer
-    // Since the renderer is already at player's feet position
     this.playerBody.position.set(0, 0, 0);
     this.add(this.playerBody);
   }
