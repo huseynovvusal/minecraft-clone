@@ -180,22 +180,20 @@ export class Player {
       this.velocity.y -= this.gravity * deltaTime * this.mass;
     }
 
-    // Horizontal movement
-    this.camera.position.x += this.direction.x;
-    this.camera.position.z += this.direction.z;
-
-    // Vertical movement
-    this.camera.position.y += this.velocity.y * deltaTime;
+    // Update player position based on direction and velocity
+    this.position.x += this.direction.x;
+    this.position.z += this.direction.z;
+    this.position.y += this.velocity.y * deltaTime;
 
     //TODO: Ground collision detection (basic)
-    if (this.camera.position.y < 25) {
-      this.camera.position.y = 25; // Reset to ground level
-      this.canJump = true; // Allow jumping again
+    if (this.position.y <= 25) {
+      this.position.y = 25; // Reset to ground level
       this.velocity.y = 0; // Reset vertical velocity
+      this.canJump = true; // Allow jumping again
     }
 
-    // Player position is at feet level, so subtract height from camera position
-    this.position.copy(this.camera.position.clone().sub(new THREE.Vector3(0, this.height, 0)));
+    // Update camera position to match player position
+    this.camera.position.copy(this.position.clone().add(new THREE.Vector3(0, this.height, 0)));
   }
 
   public getPosition(): THREE.Vector3 {
