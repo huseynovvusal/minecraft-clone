@@ -112,6 +112,19 @@ class Game {
     // Shadow helpers for debugging
     // const directionalLightHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
     // this.scene.add(directionalLightHelper);
+
+    // For debugging purposes, add a helper
+    // const planeGeometry = new THREE.PlaneGeometry(500, 500);
+    // const planeMaterial = new THREE.MeshStandardMaterial({
+    //   color: 0xcccccc,
+    //   transparent: true,
+    //   opacity: 0.75,
+    // });
+    // const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+    // plane.rotation.x = -Math.PI / 2;
+    // plane.position.y = 25;
+    // plane.receiveShadow = true;
+    // this.scene.add(plane);
   }
 
   /**

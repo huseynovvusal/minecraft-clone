@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { Chunk } from '@/world/Chunk';
 import { BlockType } from '@/types/block';
 import TextureManager from '@/rendering/TextureManager';
+import { Block } from '@/Block';
 
 class ChunkRenderer extends THREE.Group {
   private chunk: Chunk;
@@ -68,7 +69,11 @@ class ChunkRenderer extends THREE.Group {
         instancedMesh.receiveShadow = true;
 
         positions.forEach((position, index) => {
-          const matrix = new THREE.Matrix4().makeTranslation(position.x, position.y, position.z);
+          const matrix = new THREE.Matrix4().makeTranslation(
+            position.x + Block.SIZE / 2,
+            position.y + Block.SIZE / 2,
+            position.z + Block.SIZE / 2
+          );
           instancedMesh.setMatrixAt(index, matrix);
         });
 
