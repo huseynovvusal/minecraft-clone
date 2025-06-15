@@ -1,17 +1,18 @@
 import * as THREE from 'three';
 import { PointerLockControls } from 'three/examples/jsm/Addons.js';
-import Game from '@/core/Game';
 
 export class Player {
-  private readonly game: Game;
   public readonly camera: THREE.PerspectiveCamera;
   public readonly controls: PointerLockControls;
 
   // Player properties
-  private position: THREE.Vector3;
+  public position: THREE.Vector3;
   private velocity: THREE.Vector3 = new THREE.Vector3(0, 0, 0);
   private direction: THREE.Vector3 = new THREE.Vector3();
   private mass: number = 2.5; // Mass for physics calculations, if needed
+
+  public readonly height: number = 2; // Player height for collision detection
+  public readonly width: number = 1; // Player width for collision detection
 
   // Movement state
   private isMovingForward: boolean = false;
@@ -30,15 +31,16 @@ export class Player {
   private canJump: boolean = true;
   private isFlying: boolean = false;
 
-  // Helpers
-  private cameraController: THREE.CameraHelper;
+  constructor() {
+    // No need for game reference
 
-  constructor(game: Game) {
-    this.game = game;
-    // this.camera = game.camera;
-    this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight);
-    this.camera.position.set(10, 25, 10);
-    this.position = this.camera.position.clone();
+    // Initial position is at the player's feet
+    const initialPosition = new THREE.Vector3(10, 30, 10);
+    this.position = initialPosition.clone();
+
+    // Camera at eye level (player position + height)
+    this.camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight);
+    this.camera.position.set(initialPosition.x, initialPosition.y + this.height, initialPosition.z);
 
     // Initialize Pointer Lock Controls
     this.controls = new PointerLockControls(this.camera, document.body);
@@ -50,9 +52,7 @@ export class Player {
 
     this.setupKeyboardControls();
 
-    //! Add camera helper for debugging (optional)
-    this.cameraController = new THREE.CameraHelper(this.camera);
-    this.game.scene.add(this.cameraController);
+    this.initialize();
   }
 
   private setupKeyboardControls(): void {
@@ -194,7 +194,8 @@ export class Player {
       this.velocity.y = 0; // Reset vertical velocity
     }
 
-    this.position.copy(this.camera.position);
+    // Player position is at feet level, so subtract height from camera position
+    this.position.copy(this.camera.position.clone().sub(new THREE.Vector3(0, this.height, 0)));
   }
 
   public getPosition(): THREE.Vector3 {
@@ -209,8 +210,9 @@ export class Player {
   }
 
   public initialize(): void {
-    this.game.scene.add(this.controls.getObject());
+    // No need to add controls object to scene, Game class will handle this
 
     console.log('Player initialized at position:', this.position);
+    console.log('Camera initialized at position:', this.camera.position);
   }
 }

@@ -1,4 +1,5 @@
 import { Player } from '@/Player';
+import PlayerRenderer from '@/rendering/PlayerRenderer';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import Stats from 'three/examples/jsm/libs/stats.module.js';
@@ -10,11 +11,13 @@ import Stats from 'three/examples/jsm/libs/stats.module.js';
 class Game {
   public readonly renderer = new THREE.WebGLRenderer();
   public readonly camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight);
+  // Controls for the debugging camera, used when not in player view
   private readonly controls = new OrbitControls(this.camera, this.renderer.domElement);
   public readonly scene = new THREE.Scene();
   public readonly stats = new Stats();
 
   private player: Player;
+  private playerRenderer: PlayerRenderer;
 
   private readonly clock = new THREE.Clock();
   private deltaTime: number = 0;
@@ -27,8 +30,14 @@ class Game {
     this.setupLights();
 
     // Initialize player
-    this.player = new Player(this);
-    this.player.initialize();
+    this.player = new Player();
+
+    // Initialize player renderer (handles both player body and camera)
+    this.playerRenderer = new PlayerRenderer(this.player);
+    this.scene.add(this.playerRenderer);
+
+    // Add the player's controls object to the scene
+    this.scene.add(this.player.controls.getObject());
   }
 
   /**
@@ -68,6 +77,9 @@ class Game {
     this.scene.castShadow = true;
     this.scene.receiveShadow = true;
     // this.scene.fog = new THREE.FogExp2(0x87ceeb, 0.025); // Fog effect
+
+    // For testing
+    this.scene.add(new THREE.GridHelper(500, 100));
   }
 
   /**
@@ -98,8 +110,8 @@ class Game {
     this.scene.add(directionalLight);
 
     // Shadow helpers for debugging
-    const directionalLightHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
-    this.scene.add(directionalLightHelper);
+    // const directionalLightHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
+    // this.scene.add(directionalLightHelper);
   }
 
   /**
@@ -114,6 +126,16 @@ class Game {
 
     if (this.player) {
       this.player.update(this.deltaTime);
+
+      // Update player renderer
+      if (this.playerRenderer) {
+        this.playerRenderer.update();
+      }
+    }
+
+    // Update orbit controls when not in player view
+    if (!this.player.controls.isLocked) {
+      this.controls.update();
     }
 
     if (this.player.controls.isLocked) {
