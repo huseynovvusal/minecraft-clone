@@ -15,16 +15,15 @@ await TextureManager.getInstance()
 
 //! Initialize and generate a chunk
 const chunk = new Chunk();
+chunk.generate();
+const chunkRenderer = new ChunkRenderer(chunk);
+chunkRenderer.render();
 
 // Initialize the game
 //TODO: All these will be handled inside World class
 // For now, we just create a Game instance with the chunk
 // This will also handle the scene, camera, and renderer setup
-const game = new Game(chunk);
-
-chunk.generate();
-const chunkRenderer = new ChunkRenderer(chunk);
-chunkRenderer.render();
+const game = new Game(chunk, chunkRenderer);
 
 game.scene.add(chunkRenderer);
 

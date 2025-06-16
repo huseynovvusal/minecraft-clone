@@ -1,6 +1,8 @@
+import Physics from '@/Physics';
 import { Player } from '@/Player';
+import { ChunkRenderer } from '@/rendering/ChunkRenderer';
 import PlayerRenderer from '@/rendering/PlayerRenderer';
-import type { Chunk } from '@/world/Chunk';
+import { Chunk } from '@/world/Chunk';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import Stats from 'three/examples/jsm/libs/stats.module.js';
@@ -23,10 +25,20 @@ class Game {
   private readonly clock = new THREE.Clock();
   private deltaTime: number = 0;
 
+  private readonly physics = new Physics();
+
   //! Testing: Marker to visualize player's position
   private playerPositionMarker: THREE.Mesh;
 
-  constructor(private readonly chunk: Chunk) {
+  private debugCubes: THREE.Mesh[] = [];
+  private readonly maxDebugCubes = 32; // Adjust as needed
+  private debugCubeMaterial = new THREE.MeshBasicMaterial({
+    color: 0xff0000,
+    transparent: true,
+    opacity: 0.5,
+  });
+
+  constructor(private readonly chunk: Chunk, private readonly chunkRenderer: ChunkRenderer) {
     this.setupRenderer();
     this.setupCamera();
     this.setupStats();
@@ -52,6 +64,17 @@ class Game {
     );
     this.playerPositionMarker.position.copy(this.player.position);
     this.scene.add(this.playerPositionMarker);
+
+    // Initialize debug cubes pool
+    for (let i = 0; i < this.maxDebugCubes; i++) {
+      const cube = new THREE.Mesh(
+        new THREE.BoxGeometry(1 + 1e-3, 1 + 1e-3, 1 + 1e-3),
+        this.debugCubeMaterial
+      );
+      cube.visible = false;
+      this.debugCubes.push(cube);
+      this.scene.add(cube);
+    }
   }
 
   /**
@@ -153,6 +176,23 @@ class Game {
 
     if (this.player) {
       this.player.update(this.deltaTime);
+      const collisionCandidates = this.physics.checkCollision(
+        this.player.position,
+        this.player.radius,
+        this.player.height,
+        this.chunk
+      );
+
+      // --- Debug cubes for collision visualization ---
+      for (let i = 0; i < this.maxDebugCubes; i++) {
+        if (i < collisionCandidates.length) {
+          const box = collisionCandidates[i].boundingBox;
+          this.debugCubes[i].position.set(box.x.min + 0.5, box.y.min + 0.5, box.z.min + 0.5);
+          this.debugCubes[i].visible = true;
+        } else {
+          this.debugCubes[i].visible = false;
+        }
+      }
 
       // Update player renderer
       if (this.playerRenderer) {

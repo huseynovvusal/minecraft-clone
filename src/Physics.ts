@@ -31,6 +31,10 @@ class Physics {
     );
 
     const collisionCandidates = this.broadPhaseCollisionCheck(playerBoundingBox, chunk);
+
+    console.log('Collision Candidates:', collisionCandidates);
+
+    return collisionCandidates;
   }
 
   /**
@@ -41,18 +45,21 @@ class Physics {
     radius: number,
     height: number
   ): IPlayerBoundingBox {
+    // !Testing
+    const padding = 0.1; // Padding to avoid precision issues
+
     return {
       x: {
-        min: Math.floor(position.x - radius),
-        max: Math.ceil(position.x + radius),
+        min: Math.floor(position.x - radius + padding),
+        max: Math.ceil(position.x + radius - padding),
       },
       y: {
-        min: Math.floor(position.y - height / 2),
-        max: Math.ceil(position.y + height / 2),
+        min: Math.floor(position.y - height / 2 - padding),
+        max: Math.ceil(position.y + height / 2 + padding),
       },
       z: {
-        min: Math.floor(position.z - radius),
-        max: Math.ceil(position.z + radius),
+        min: Math.floor(position.z - radius + padding),
+        max: Math.ceil(position.z + radius - padding),
       },
       position: position.clone(),
     };
