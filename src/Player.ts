@@ -40,7 +40,11 @@ export class Player {
 
     // Camera at eye level (player position + height)
     this.camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight);
-    this.camera.position.set(initialPosition.x, initialPosition.y, initialPosition.z);
+    this.camera.position.set(
+      initialPosition.x,
+      initialPosition.y + this.height / 2,
+      initialPosition.z
+    );
 
     // Initialize Pointer Lock Controls
     this.controls = new PointerLockControls(this.camera, document.body);
@@ -186,8 +190,8 @@ export class Player {
     this.position.y += this.velocity.y * deltaTime;
 
     //TODO: Ground collision detection (basic)
-    if (this.position.y <= 10) {
-      this.position.y = 10; // Reset to ground level
+    if (this.position.y <= 20) {
+      this.position.y = 20; // Reset to ground level
       this.velocity.y = 0; // Reset vertical velocity
       this.canJump = true; // Allow jumping again
     }

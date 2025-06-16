@@ -18,6 +18,21 @@ interface ICollisionCandidate {
 }
 
 class Physics {
+  public checkCollision(
+    playerPosition: THREE.Vector3,
+    playerRadius: number,
+    playerHeight: number,
+    chunk: Chunk
+  ): any {
+    const playerBoundingBox = this.createPlayerBoundingBox(
+      playerPosition,
+      playerRadius,
+      playerHeight
+    );
+
+    const collisionCandidates = this.broadPhaseCollisionCheck(playerBoundingBox, chunk);
+  }
+
   /**
    * Creates a bounding box for the player based on their position, radius, and height.
    */
@@ -49,7 +64,24 @@ class Physics {
   ): ICollisionCandidate[] {
     const collisionCandidates: ICollisionCandidate[] = [];
 
-    //TODO: Iterate through all blocks within the player's bounding box and check for potential collisions
+    for (let x = playerBox.x.min; x <= playerBox.x.max; x++) {
+      for (let y = playerBox.y.min; y <= playerBox.y.max; y++) {
+        for (let z = playerBox.z.min; z <= playerBox.z.max; z++) {
+          const block = chunk.getBlock(x, y, z);
+
+          if (!block || !block.isSolid) continue;
+
+          collisionCandidates.push({
+            block: block,
+            boundingBox: {
+              x: { min: x, max: x + 1 },
+              y: { min: y, max: y + 1 },
+              z: { min: z, max: z + 1 },
+            },
+          });
+        }
+      }
+    }
 
     return collisionCandidates;
   }

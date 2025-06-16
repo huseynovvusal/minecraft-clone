@@ -29,7 +29,7 @@ class PlayerRenderer extends THREE.Group {
    */
   private createPlayerBody(): void {
     const height = this.player.height;
-    const radius = this.player.width / 2;
+    const radius = this.player.radius;
 
     const cylinderGeometry = new THREE.CylinderGeometry(radius, radius, height, 16);
     const cylinderMaterial = new THREE.MeshStandardMaterial({

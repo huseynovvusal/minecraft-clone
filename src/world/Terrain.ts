@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { SimplexNoise } from 'three/examples/jsm/Addons.js';
 import { Chunk } from '@/world/Chunk';
 import { AirBlock, CoalOreBlock, DirtBlock, GrassBlock, IronOreBlock, StoneBlock } from '@/Block';
@@ -41,14 +42,14 @@ export class Terrain {
         for (let y = 0; y < chunk.size.height; y++) {
           if (y < height - 1 || y < height - 5) {
             if (y / height < 0.75) {
-              chunk.setBlock(x, y, z, new StoneBlock());
+              chunk.setBlock(x, y, z, new StoneBlock(new THREE.Vector3(x, y, z)));
             } else {
-              chunk.setBlock(x, y, z, new DirtBlock());
+              chunk.setBlock(x, y, z, new DirtBlock(new THREE.Vector3(x, y, z)));
             }
           } else if (y === height - 1) {
-            chunk.setBlock(x, y, z, new GrassBlock());
+            chunk.setBlock(x, y, z, new GrassBlock(new THREE.Vector3(x, y, z)));
           } else {
-            chunk.setBlock(x, y, z, new AirBlock());
+            chunk.setBlock(x, y, z, new AirBlock(new THREE.Vector3(x, y, z)));
           }
         }
       }
@@ -75,7 +76,7 @@ export class Terrain {
 
             switch (blockType) {
               case BlockType.CoalOre: {
-                const coalOreBlock = new CoalOreBlock();
+                const coalOreBlock = new CoalOreBlock(new THREE.Vector3(x, y, z));
                 const value = simplex.noise3d(
                   x * coalOreBlock.scale.x,
                   y * coalOreBlock.scale.y,
@@ -87,7 +88,7 @@ export class Terrain {
                 break;
               }
               case BlockType.IronOre: {
-                const ironOreBlock = new IronOreBlock();
+                const ironOreBlock = new IronOreBlock(new THREE.Vector3(x, y, z));
                 const value = simplex.noise3d(
                   x * ironOreBlock.scale.x,
                   y * ironOreBlock.scale.y,
