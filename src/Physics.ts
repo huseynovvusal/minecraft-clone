@@ -43,6 +43,8 @@ class Physics {
     return {
       collisions: collisionDetails,
       hasCollision: collisionDetails.length > 0,
+      //! Testing
+      collisionCandidates,
     };
   }
 
@@ -94,9 +96,9 @@ class Physics {
           collisionCandidates.push({
             block: block,
             boundingBox: {
-              x: { min: x, max: x + 1 },
-              y: { min: y, max: y + 1 },
-              z: { min: z, max: z + 1 },
+              x: { min: x - 0.5, max: x + 0.5 },
+              y: { min: y - 0.5, max: y + 0.5 },
+              z: { min: z - 0.5, max: z + 0.5 },
             },
           });
         }
@@ -170,20 +172,20 @@ class Physics {
     const normal = new THREE.Vector3();
 
     // Find the axis with the smallest penetration
-    if (penetration.x <= penetration.y && penetration.x <= penetration.z) {
-      // X-axis has smallest penetration
-      normal.x = 1;
-    }
+    // if (penetration.x <= penetration.y && penetration.x <= penetration.z) {
+    //   // X-axis has smallest penetration
+    //   normal.x = 1;
+    // }
 
     if (penetration.y <= penetration.x && penetration.y <= penetration.z) {
       // Y-axis has smallest penetration
       normal.y = 1;
     }
 
-    if (penetration.z <= penetration.x && penetration.z <= penetration.y) {
-      // Z-axis has smallest penetration
-      normal.z = 1;
-    }
+    // if (penetration.z <= penetration.x && penetration.z <= penetration.y) {
+    //   // Z-axis has smallest penetration
+    //   normal.z = 1;
+    // }
 
     return normal;
   }
