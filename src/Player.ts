@@ -26,7 +26,7 @@ export class Player {
   private isMovingDown: boolean = false;
 
   // Movement settings
-  private readonly speed: number = 10;
+  private readonly speed: number = 30;
   private readonly jumpHeight: number = 8;
   private readonly gravity: number = 9.81;
 
@@ -191,9 +191,9 @@ export class Player {
     }
 
     const intendedPosition = new THREE.Vector3(
-      this.position.x + this.direction.x,
+      this.position.x + this.direction.x * this.speed * deltaTime,
       this.position.y + this.velocity.y * deltaTime,
-      this.position.z + this.direction.z
+      this.position.z + this.direction.z * this.speed * deltaTime
     );
 
     const collisionResult = this.physics.checkCollision(

@@ -172,18 +172,16 @@ class Physics {
     const normal = new THREE.Vector3();
 
     // Find the axis with the smallest penetration
-    // if (penetration.x <= penetration.y && penetration.x <= penetration.z) {
-    //   // X-axis has smallest penetration
-    //   normal.x = 1;
-    // }
-    if (penetration.y <= penetration.x && penetration.y <= penetration.z) {
+    if (penetration.x <= penetration.y && penetration.x <= penetration.z) {
+      // X-axis has smallest penetration
+      normal.x = 1;
+    } else if (penetration.y <= penetration.x && penetration.y <= penetration.z) {
       // Y-axis has smallest penetration
       normal.y = 1;
+    } else if (penetration.z <= penetration.x && penetration.z <= penetration.y) {
+      // Z-axis has smallest penetration
+      normal.z = 1;
     }
-    //  else if (penetration.z <= penetration.x && penetration.z <= penetration.y) {
-    //   // Z-axis has smallest penetration
-    //   normal.z = 1;
-    // }
 
     return normal;
   }
