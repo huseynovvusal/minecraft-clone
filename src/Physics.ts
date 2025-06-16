@@ -61,8 +61,8 @@ class Physics {
         max: position.y + height / 2,
       },
       z: {
-        min: Math.floor(position.z - radius),
-        max: Math.ceil(position.z + radius),
+        min: position.z - radius,
+        max: position.z + radius,
       },
       position: position.clone(),
     };
@@ -127,7 +127,14 @@ class Physics {
     }
 
     //! Debug
-    console.log('Narrow Phase Collisions:', collisions.length);
+    console.log(
+      'Narrow Phase Collisions:',
+      collisions.length
+      // collisions.map(c => c.block.position),
+      // collisions.map(c => c.penetration),
+      // collisions.map(c => c.normal),
+      // playerBox
+    );
 
     return collisions;
   }

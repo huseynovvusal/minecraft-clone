@@ -187,7 +187,8 @@ class Game {
       for (let i = 0; i < this.maxDebugCubes; i++) {
         if (i < collisionCandidates.length) {
           const box = collisionCandidates[i].boundingBox;
-          this.debugCubes[i].position.set(box.x.min + 0.5, box.y.min + 0.5, box.z.min + 0.5);
+          const p = 0.5;
+          this.debugCubes[i].position.set(box.x.min + p, box.y.min + p, box.z.min + p);
           this.debugCubes[i].visible = true;
         } else {
           this.debugCubes[i].visible = false;

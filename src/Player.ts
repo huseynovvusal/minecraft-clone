@@ -36,7 +36,7 @@ export class Player {
     // No need for game reference
 
     // Initial position is at the player's feet
-    const initialPosition = new THREE.Vector3(10, 30, 10);
+    const initialPosition = new THREE.Vector3(10, 25, 10);
     this.position = initialPosition.clone();
 
     // Camera at eye level (player position + height)
@@ -182,7 +182,7 @@ export class Player {
       }
     } else {
       // Gravity effect when not flying
-      this.velocity.y -= this.gravity * deltaTime * this.mass;
+      // this.velocity.y -= this.gravity * deltaTime * this.mass;
     }
 
     // Update player position based on direction and velocity
@@ -191,11 +191,11 @@ export class Player {
     this.position.y += this.velocity.y * deltaTime;
 
     //TODO: Ground collision detection (basic)
-    if (this.position.y <= 19.99) {
-      this.position.y = 19.99; // Reset to ground level
-      this.velocity.y = 0; // Reset vertical velocity
-      this.canJump = true; // Allow jumping again
-    }
+    // if (this.position.y <= 25) {
+    //   this.position.y = 25; // Reset to ground level
+    //   this.velocity.y = 0; // Reset vertical velocity
+    //   this.canJump = true; // Allow jumping again
+    // }
 
     // Update camera position to match player position
     this.camera.position.copy(this.position.clone().add(new THREE.Vector3(0, this.height / 2, 0)));
