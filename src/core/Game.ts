@@ -183,7 +183,7 @@ class Game {
         this.chunk
       );
 
-      // --- Debug cubes for collision visualization ---
+      //! --- Debug cubes for collision visualization ---
       for (let i = 0; i < this.maxDebugCubes; i++) {
         if (i < collisionCandidates.length) {
           const box = collisionCandidates[i].boundingBox;

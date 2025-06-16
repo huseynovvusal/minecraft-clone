@@ -17,6 +17,12 @@ interface ICollisionCandidate {
   boundingBox: IBoundingBox;
 }
 
+interface ICollisionDetail {
+  block: Block;
+  penetration: THREE.Vector3;
+  normal: THREE.Vector3;
+}
+
 class Physics {
   public checkCollision(
     playerPosition: THREE.Vector3,
@@ -32,6 +38,8 @@ class Physics {
 
     const collisionCandidates = this.broadPhaseCollisionCheck(playerBoundingBox, chunk);
 
+    const collisionDetails = this.narrowPhaseCollisionCheck(playerBoundingBox, collisionCandidates);
+
     return collisionCandidates;
   }
 
@@ -45,12 +53,12 @@ class Physics {
   ): IPlayerBoundingBox {
     return {
       x: {
-        min: Math.floor(position.x - radius),
-        max: Math.ceil(position.x + radius),
+        min: position.x - radius,
+        max: position.x + radius,
       },
       y: {
-        min: Math.floor(position.y - height / 2),
-        max: Math.ceil(position.y + height / 2),
+        min: position.y - height / 2,
+        max: position.y + height / 2,
       },
       z: {
         min: Math.floor(position.z - radius),
@@ -66,9 +74,16 @@ class Physics {
   ): ICollisionCandidate[] {
     const collisionCandidates: ICollisionCandidate[] = [];
 
-    for (let x = playerBox.x.min; x <= playerBox.x.max; x++) {
-      for (let y = playerBox.y.min; y <= playerBox.y.max; y++) {
-        for (let z = playerBox.z.min; z <= playerBox.z.max; z++) {
+    const minX = Math.floor(playerBox.x.min);
+    const maxX = Math.ceil(playerBox.x.max);
+    const minY = Math.floor(playerBox.y.min);
+    const maxY = Math.ceil(playerBox.y.max);
+    const minZ = Math.floor(playerBox.z.min);
+    const maxZ = Math.ceil(playerBox.z.max);
+
+    for (let x = minX; x <= maxX; x++) {
+      for (let y = minY; y <= maxY; y++) {
+        for (let z = minZ; z <= maxZ; z++) {
           const block = chunk.getBlock(x, y, z);
 
           if (!block || !block.isSolid) continue;
@@ -85,9 +100,78 @@ class Physics {
       }
     }
 
+    //! Debug
     console.log('Broad Phase Collision Candidates:', collisionCandidates.length);
 
     return collisionCandidates;
+  }
+
+  private narrowPhaseCollisionCheck(
+    playerBox: IPlayerBoundingBox,
+    candidates: ICollisionCandidate[]
+  ): ICollisionDetail[] {
+    const collisions: ICollisionDetail[] = [];
+
+    for (const candidate of candidates) {
+      if (this.checkAABBIntersection(playerBox, candidate.boundingBox)) {
+        const penetration = this.calculatePenetration(playerBox, candidate.boundingBox);
+
+        const normal = this.calculateCollisionNormal(penetration);
+
+        collisions.push({
+          block: candidate.block,
+          penetration: penetration,
+          normal: normal,
+        });
+      }
+    }
+
+    //! Debug
+    console.log('Narrow Phase Collisions:', collisions.length);
+
+    return collisions;
+  }
+
+  private checkAABBIntersection(boxA: IBoundingBox, boxB: IBoundingBox): boolean {
+    return (
+      boxA.x.min <= boxB.x.max &&
+      boxA.x.max >= boxB.x.min &&
+      boxA.y.min <= boxB.y.max &&
+      boxA.y.max >= boxB.y.min &&
+      boxA.z.min <= boxB.z.max &&
+      boxA.z.max >= boxB.z.min
+    );
+  }
+
+  private calculatePenetration(
+    playerBox: IPlayerBoundingBox,
+    blockBox: IBoundingBox
+  ): THREE.Vector3 {
+    const xOverlap = Math.min(playerBox.x.max - blockBox.x.min, blockBox.x.max - playerBox.x.min);
+
+    const yOverlap = Math.min(playerBox.y.max - blockBox.y.min, blockBox.y.max - playerBox.y.min);
+
+    const zOverlap = Math.min(playerBox.z.max - blockBox.z.min, blockBox.z.max - playerBox.z.min);
+
+    return new THREE.Vector3(xOverlap, yOverlap, zOverlap);
+  }
+
+  private calculateCollisionNormal(penetration: THREE.Vector3): THREE.Vector3 {
+    const normal = new THREE.Vector3();
+
+    // Find the axis with the smallest penetration
+    if (penetration.x <= penetration.y && penetration.x <= penetration.z) {
+      // X-axis has smallest penetration
+      normal.x = 1;
+    } else if (penetration.y <= penetration.x && penetration.y <= penetration.z) {
+      // Y-axis has smallest penetration
+      normal.y = 1;
+    } else {
+      // Z-axis has smallest penetration
+      normal.z = 1;
+    }
+
+    return normal;
   }
 }
 
