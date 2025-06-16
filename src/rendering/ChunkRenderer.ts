@@ -69,11 +69,7 @@ class ChunkRenderer extends THREE.Group {
         instancedMesh.receiveShadow = true;
 
         positions.forEach((position, index) => {
-          const matrix = new THREE.Matrix4().makeTranslation(
-            position.x + Block.SIZE / 2,
-            position.y + Block.SIZE / 2,
-            position.z + Block.SIZE / 2
-          );
+          const matrix = new THREE.Matrix4().makeTranslation(position.x, position.y, position.z);
           instancedMesh.setMatrixAt(index, matrix);
         });
 
