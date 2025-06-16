@@ -29,7 +29,7 @@ class Physics {
     playerRadius: number,
     playerHeight: number,
     chunk: Chunk
-  ): any {
+  ) {
     const playerBoundingBox = this.createPlayerBoundingBox(
       playerPosition,
       playerRadius,
@@ -40,7 +40,10 @@ class Physics {
 
     const collisionDetails = this.narrowPhaseCollisionCheck(playerBoundingBox, collisionCandidates);
 
-    return collisionCandidates;
+    return {
+      collisions: collisionDetails,
+      hasCollision: collisionDetails.length > 0,
+    };
   }
 
   /**
@@ -179,6 +182,50 @@ class Physics {
     }
 
     return normal;
+  }
+
+  public resolveCollisions(
+    position: THREE.Vector3,
+    velocity: THREE.Vector3,
+    collisions: ICollisionDetail[]
+  ) {
+    const newPosition = position.clone();
+    const newVelocity = velocity.clone();
+    let isOnGround = false;
+
+    for (const collision of collisions) {
+      const correction = new THREE.Vector3();
+
+      if (collision.normal.x !== 0) {
+        const direction = Math.sign(newVelocity.x);
+        correction.x = collision.penetration.x * (direction || 1);
+        newVelocity.x = 0;
+      }
+
+      if (collision.normal.y !== 0) {
+        const direction = Math.sign(newVelocity.y);
+        correction.y = collision.penetration.y * (direction || 1);
+        newVelocity.y = 0;
+
+        if (direction < 0) {
+          isOnGround = true;
+        }
+      }
+
+      if (collision.normal.z !== 0) {
+        const direction = Math.sign(newVelocity.z);
+        correction.z = collision.penetration.z * (direction || 1);
+        newVelocity.z = 0;
+      }
+
+      newPosition.add(correction);
+    }
+
+    return {
+      position: newPosition,
+      velocity: newVelocity,
+      isOnGround: isOnGround,
+    };
   }
 }
 

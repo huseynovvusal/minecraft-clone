@@ -175,15 +175,15 @@ class Game {
     this.stats.begin();
 
     if (this.player) {
-      this.player.update(this.deltaTime);
-      const collisionCandidates = this.physics.checkCollision(
-        this.player.position,
-        this.player.radius,
-        this.player.height,
-        this.chunk
-      );
+      this.player.update(this.deltaTime, this.chunk);
+      // const collisionCandidates = this.physics.checkCollision(
+      //   this.player.position,
+      //   this.player.radius,
+      //   this.player.height,
+      //   this.chunk
+      // );
 
-      //! --- Debug cubes for collision visualization ---
+      /*      //! --- Debug cubes for collision visualization ---
       for (let i = 0; i < this.maxDebugCubes; i++) {
         if (i < collisionCandidates.length) {
           const box = collisionCandidates[i].boundingBox;
@@ -193,7 +193,7 @@ class Game {
         } else {
           this.debugCubes[i].visible = false;
         }
-      }
+      } */
 
       // Update player renderer
       if (this.playerRenderer) {

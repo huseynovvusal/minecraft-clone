@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import { PointerLockControls } from 'three/examples/jsm/Addons.js';
+import Physics from './Physics';
+import type { Chunk } from './world/Chunk';
 
 export class Player {
   public readonly camera: THREE.PerspectiveCamera;
@@ -31,6 +33,9 @@ export class Player {
   // Physics flags
   private canJump: boolean = true;
   private isFlying: boolean = false;
+
+  // Physics
+  private readonly physics = new Physics();
 
   constructor() {
     // No need for game reference
@@ -130,7 +135,7 @@ export class Player {
     }
   }
 
-  public update(deltaTime: number): void {
+  public update(deltaTime: number, chunk: Chunk): void {
     if (!this.controls.isLocked) return;
 
     //! Update UI
@@ -182,20 +187,44 @@ export class Player {
       }
     } else {
       // Gravity effect when not flying
-      // this.velocity.y -= this.gravity * deltaTime * this.mass;
+      this.velocity.y -= this.gravity * deltaTime * this.mass;
     }
 
-    // Update player position based on direction and velocity
+    const intendedPosition = new THREE.Vector3(
+      this.position.x + this.direction.x,
+      this.position.y + this.velocity.y * deltaTime,
+      this.position.z + this.direction.z
+    );
+
+    const collisionResult = this.physics.checkCollision(
+      intendedPosition,
+      this.radius,
+      this.height,
+      chunk
+    );
+
+    if (collisionResult.hasCollision) {
+      const resolution = this.physics.resolveCollisions(
+        intendedPosition,
+        this.velocity,
+        collisionResult.collisions
+      );
+
+      this.position.copy(resolution.position);
+      this.velocity.copy(resolution.velocity);
+
+      if (resolution.isOnGround) {
+        this.canJump = true; // Allow jumping again when on ground
+      }
+    } else {
+      // No collision, update position directly
+      this.position.copy(intendedPosition);
+    }
+
+    /*     // Update player position based on direction and velocity
     this.position.x += this.direction.x;
     this.position.z += this.direction.z;
-    this.position.y += this.velocity.y * deltaTime;
-
-    //TODO: Ground collision detection (basic)
-    // if (this.position.y <= 25) {
-    //   this.position.y = 25; // Reset to ground level
-    //   this.velocity.y = 0; // Reset vertical velocity
-    //   this.canJump = true; // Allow jumping again
-    // }
+    this.position.y += this.velocity.y * deltaTime; */
 
     // Update camera position to match player position
     this.camera.position.copy(this.position.clone().add(new THREE.Vector3(0, this.height / 2, 0)));
