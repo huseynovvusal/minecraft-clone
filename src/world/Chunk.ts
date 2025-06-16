@@ -69,7 +69,6 @@ export class Chunk implements IChunk {
     }
 
     this.blocks.setBlock(x, y, z, block);
-    // this.blocks[x][y][z] = block
   }
 
   /**

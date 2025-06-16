@@ -61,7 +61,7 @@ class ChunkRenderer extends THREE.Group {
         );
 
         //? Add wireframe strokes for testing
-        // this.addWireframeStrokes(geometry, positions);
+        this.addWireframeStrokes(geometry, positions);
 
         const instancedMesh = new THREE.InstancedMesh(geometry, material, positions.length);
 
@@ -102,7 +102,11 @@ class ChunkRenderer extends THREE.Group {
     const wireframeMesh = new THREE.InstancedMesh(geometry, wireframeMaterial, positions.length);
 
     positions.forEach((position, index) => {
-      const matrix = new THREE.Matrix4().makeTranslation(position.x, position.y, position.z);
+      const matrix = new THREE.Matrix4().makeTranslation(
+        position.x + Block.SIZE / 2,
+        position.y + Block.SIZE / 2,
+        position.z + Block.SIZE / 2
+      );
       wireframeMesh.setMatrixAt(index, matrix);
     });
 
