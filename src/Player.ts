@@ -11,8 +11,8 @@ export class Player {
   private direction: THREE.Vector3 = new THREE.Vector3();
   private mass: number = 2.5; // Mass for physics calculations, if needed
 
-  public readonly height: number = 2; // Player height for collision detection
-  public readonly width: number = 1; // Player width for collision detection
+  public readonly height: number = 1.75; // Player height for collision detection
+  public readonly radius: number = 0.5; // Player radius for collision detection
 
   // Movement state
   private isMovingForward: boolean = false;
