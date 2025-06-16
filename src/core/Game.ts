@@ -22,6 +22,9 @@ class Game {
   private readonly clock = new THREE.Clock();
   private deltaTime: number = 0;
 
+  //! Testing: Marker to visualize player's position
+  private playerPositionMarker: THREE.Mesh;
+
   constructor() {
     this.setupRenderer();
     this.setupCamera();
@@ -38,7 +41,16 @@ class Game {
 
     // Add the player's controls object to the scene
     this.scene.add(this.player.controls.getObject());
+    //! Add the player's camera helper to the scene for debugging
     this.scene.add(this.playerRenderer.cameraHelper);
+
+    //! Testing: Add an object to identify the player's position
+    this.playerPositionMarker = new THREE.Mesh(
+      new THREE.SphereGeometry(0.25, 5, 5),
+      new THREE.MeshBasicMaterial({ color: 0xff0000 })
+    );
+    this.playerPositionMarker.position.copy(this.player.position);
+    this.scene.add(this.playerPositionMarker);
   }
 
   /**
@@ -145,6 +157,9 @@ class Game {
       if (this.playerRenderer) {
         this.playerRenderer.update();
       }
+
+      // !Testing: Update player position marker
+      this.playerPositionMarker.position.copy(this.player.position);
     }
 
     // Update orbit controls when not in player view

@@ -14,16 +14,10 @@ class PlayerRenderer extends THREE.Group {
     super();
     this.player = player;
 
-    // Add the camera which is already positioned at eye level by the Player class
-    // this.add(this.player.camera);
-
-    // Position the renderer at the player's feet position
     this.position.copy(this.player.position);
 
-    // Copy camera rotation
     this.rotation.copy(this.player.camera.rotation);
 
-    // Initialize camera helper for debugging (optional)
     this.cameraHelper = new THREE.CameraHelper(this.player.camera);
     // this.add(this.cameraHelper);
 
@@ -48,7 +42,7 @@ class PlayerRenderer extends THREE.Group {
     const cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
 
     // Since cylinder origin is at center, offset it up by half height
-    cylinder.position.y = height / 2;
+    // cylinder.position.y = height / 2;
 
     this.playerBody = new THREE.Group();
     this.playerBody.add(cylinder);

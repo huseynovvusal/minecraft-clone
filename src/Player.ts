@@ -40,7 +40,7 @@ export class Player {
 
     // Camera at eye level (player position + height)
     this.camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight);
-    this.camera.position.set(initialPosition.x, initialPosition.y + this.height, initialPosition.z);
+    this.camera.position.set(initialPosition.x, initialPosition.y, initialPosition.z);
 
     // Initialize Pointer Lock Controls
     this.controls = new PointerLockControls(this.camera, document.body);
@@ -193,7 +193,7 @@ export class Player {
     }
 
     // Update camera position to match player position
-    this.camera.position.copy(this.position.clone().add(new THREE.Vector3(0, this.height, 0)));
+    this.camera.position.copy(this.position.clone().add(new THREE.Vector3(0, this.height / 2, 0)));
   }
 
   public getPosition(): THREE.Vector3 {
