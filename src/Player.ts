@@ -186,8 +186,8 @@ export class Player {
     this.position.y += this.velocity.y * deltaTime;
 
     //TODO: Ground collision detection (basic)
-    if (this.position.y <= 25) {
-      this.position.y = 25; // Reset to ground level
+    if (this.position.y <= 10) {
+      this.position.y = 10; // Reset to ground level
       this.velocity.y = 0; // Reset vertical velocity
       this.canJump = true; // Allow jumping again
     }

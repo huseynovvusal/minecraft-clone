@@ -1,5 +1,6 @@
 import { Player } from '@/Player';
 import PlayerRenderer from '@/rendering/PlayerRenderer';
+import type { Chunk } from '@/world/Chunk';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import Stats from 'three/examples/jsm/libs/stats.module.js';
@@ -25,7 +26,7 @@ class Game {
   //! Testing: Marker to visualize player's position
   private playerPositionMarker: THREE.Mesh;
 
-  constructor() {
+  constructor(private readonly chunk: Chunk) {
     this.setupRenderer();
     this.setupCamera();
     this.setupStats();
@@ -156,6 +157,16 @@ class Game {
       // Update player renderer
       if (this.playerRenderer) {
         this.playerRenderer.update();
+
+        // !Testing: Log player position and check for blocks
+        console.log(
+          'Is there a block at player position?',
+          this.chunk.getBlock(
+            Math.floor(this.player.position.x),
+            Math.floor(this.player.position.y - this.player.height / 2),
+            Math.floor(this.player.position.z)
+          )
+        );
       }
 
       // !Testing: Update player position marker
