@@ -198,15 +198,15 @@ class Game {
       if (this.playerRenderer) {
         this.playerRenderer.update();
 
-        // !Testing: Log player position and check for blocks
-        console.log(
-          'Is there a block at player position?',
-          this.chunk.getBlock(
-            Math.floor(this.player.position.x),
-            Math.floor(this.player.position.y - this.player.height / 2),
-            Math.floor(this.player.position.z)
-          )
-        );
+        /*   // !Testing: Log player position and check for blocks
+        // console.log(
+        //   'Is there a block at player position?',
+        //   this.chunk.getBlock(
+        //     Math.floor(this.player.position.x),
+        //     Math.floor(this.player.position.y - this.player.height / 2),
+        //     Math.floor(this.player.position.z)
+        //   )
+        // ); */
       }
 
       // !Testing: Update player position marker

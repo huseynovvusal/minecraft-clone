@@ -32,8 +32,6 @@ class Physics {
 
     const collisionCandidates = this.broadPhaseCollisionCheck(playerBoundingBox, chunk);
 
-    console.log('Collision Candidates:', collisionCandidates);
-
     return collisionCandidates;
   }
 
@@ -45,21 +43,18 @@ class Physics {
     radius: number,
     height: number
   ): IPlayerBoundingBox {
-    // !Testing
-    const padding = 0.1; // Padding to avoid precision issues
-
     return {
       x: {
-        min: Math.floor(position.x - radius + padding),
-        max: Math.ceil(position.x + radius - padding),
+        min: Math.floor(position.x - radius),
+        max: Math.ceil(position.x + radius),
       },
       y: {
-        min: Math.floor(position.y - height / 2 - padding),
-        max: Math.ceil(position.y + height / 2 + padding),
+        min: Math.floor(position.y - height / 2),
+        max: Math.ceil(position.y + height / 2),
       },
       z: {
-        min: Math.floor(position.z - radius + padding),
-        max: Math.ceil(position.z + radius - padding),
+        min: Math.floor(position.z - radius),
+        max: Math.ceil(position.z + radius),
       },
       position: position.clone(),
     };
@@ -90,18 +85,9 @@ class Physics {
       }
     }
 
-    return collisionCandidates;
-  }
+    console.log('Broad Phase Collision Candidates:', collisionCandidates.length);
 
-  private checkBoxIntersection(boxA: IBoundingBox, boxB: IBoundingBox): boolean {
-    return (
-      boxA.x.max > boxB.x.min &&
-      boxA.x.min < boxB.x.max &&
-      boxA.y.max > boxB.y.min &&
-      boxA.y.min < boxB.y.max &&
-      boxA.z.max > boxB.z.min &&
-      boxA.z.min < boxB.z.max
-    );
+    return collisionCandidates;
   }
 }
 
