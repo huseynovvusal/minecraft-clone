@@ -31,7 +31,7 @@ export class Player {
   private readonly gravity: number = 9.81;
 
   // Physics flags
-  private canJump: boolean = true;
+  public canJump: boolean = true;
   private isFlying: boolean = false;
 
   // Physics

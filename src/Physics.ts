@@ -176,13 +176,11 @@ class Physics {
     //   // X-axis has smallest penetration
     //   normal.x = 1;
     // }
-
     if (penetration.y <= penetration.x && penetration.y <= penetration.z) {
       // Y-axis has smallest penetration
       normal.y = 1;
     }
-
-    // if (penetration.z <= penetration.x && penetration.z <= penetration.y) {
+    //  else if (penetration.z <= penetration.x && penetration.z <= penetration.y) {
     //   // Z-axis has smallest penetration
     //   normal.z = 1;
     // }
@@ -209,13 +207,18 @@ class Physics {
       }
 
       if (collision.normal.y !== 0) {
-        const direction = Math.sign(newVelocity.y);
-        correction.y = collision.penetration.y * (direction || 1);
-        newVelocity.y = 0;
+        const playerCenterY = position.y;
+        const blockCenterY = collision.block.position.y;
 
-        if (direction < 0) {
+        const direction = playerCenterY > blockCenterY ? 1 : -1;
+
+        correction.y = collision.penetration.y * direction;
+
+        if (newVelocity.y < 0 && collision.normal.y > 0) {
           isOnGround = true;
         }
+
+        newVelocity.y = 0;
       }
 
       if (collision.normal.z !== 0) {

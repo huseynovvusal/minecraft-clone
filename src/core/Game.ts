@@ -59,7 +59,7 @@ class Game {
 
     //! Testing: Add an object to identify the player's position
     this.playerPositionMarker = new THREE.Mesh(
-      new THREE.SphereGeometry(0.25, 5, 5),
+      new THREE.SphereGeometry(0.1, 5, 5),
       new THREE.MeshBasicMaterial({ color: 0xff0000 })
     );
     this.playerPositionMarker.position.copy(this.player.position);
@@ -210,14 +210,15 @@ class Game {
         this.playerRenderer.update();
 
         // !Testing: Log player position and check for blocks
-        console.log(
-          'Is there a block at player position?',
-          this.chunk.getBlock(
-            Math.floor(this.player.position.x),
-            Math.floor(this.player.position.y - this.player.height / 2),
-            Math.floor(this.player.position.z)
-          )
-        );
+        // console.log(
+        //   'Is there a block at player position?',
+        //   this.chunk.getBlock(
+        //     Math.floor(this.player.position.x),
+        //     Math.floor(this.player.position.y - this.player.height / 2),
+        //     Math.floor(this.player.position.z)
+        //   ),
+
+        // );
       }
 
       // !Testing: Update player position marker
