@@ -173,10 +173,14 @@ class Physics {
     if (penetration.x <= penetration.y && penetration.x <= penetration.z) {
       // X-axis has smallest penetration
       normal.x = 1;
-    } else if (penetration.y <= penetration.x && penetration.y <= penetration.z) {
+    }
+
+    if (penetration.y <= penetration.x && penetration.y <= penetration.z) {
       // Y-axis has smallest penetration
       normal.y = 1;
-    } else {
+    }
+
+    if (penetration.z <= penetration.x && penetration.z <= penetration.y) {
       // Z-axis has smallest penetration
       normal.z = 1;
     }
