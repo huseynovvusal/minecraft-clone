@@ -34,24 +34,15 @@ export class Player {
   private readonly physics = new Physics();
 
   constructor() {
-    // No need for game reference
-
     // Initial position is at the player's feet
     const initialPosition = new THREE.Vector3(10, 25, 10);
     this.position = initialPosition.clone();
 
-    // Camera at eye level (player position + height)
-    // this.camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight);
-    // this.camera.position.set(
-    //   initialPosition.x,
-    //   initialPosition.y + this.height / 2,
-    //   initialPosition.z
-    // );
-
-    // Initialize Pointer Lock Controls
-    // this.controls = new PointerLockControls(this.camera, document.body);
-
     this.setupKeyboardControls();
+  }
+
+  public respawn(): void {
+    this.position.set(25, 50, 25);
   }
 
   private setupKeyboardControls(): void {

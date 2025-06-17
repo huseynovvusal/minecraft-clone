@@ -17,22 +17,22 @@ class Game {
   public readonly scene = new THREE.Scene();
   public readonly stats = new Stats();
 
-  private player: Player;
+  public readonly player: Player;
   private playerRenderer: PlayerRenderer;
 
   private readonly clock = new THREE.Clock();
   private deltaTime: number = 0;
 
   //! Testing: Marker to visualize player's position
-  private playerPositionMarker: THREE.Mesh;
+  // private playerPositionMarker: THREE.Mesh;
 
-  private debugCubes: THREE.Mesh[] = [];
+  /*   private debugCubes: THREE.Mesh[] = [];
   private readonly maxDebugCubes = 32; // Adjust as needed
   private debugCubeMaterial = new THREE.MeshBasicMaterial({
     color: 0xff0000,
     transparent: true,
     opacity: 0.5,
-  });
+  }); */
 
   constructor(private readonly chunk: Chunk) {
     this.setupRenderer();
@@ -54,15 +54,15 @@ class Game {
     //! Add the player's camera helper to the scene for debugging
     this.scene.add(this.playerRenderer.cameraHelper);
 
-    //! Testing: Add an object to identify the player's position
+    /*     //! Testing: Add an object to identify the player's position
     this.playerPositionMarker = new THREE.Mesh(
       new THREE.SphereGeometry(0.05, 5, 5),
       new THREE.MeshBasicMaterial({ color: 0xff0000 })
     );
     this.playerPositionMarker.position.copy(this.player.position);
-    this.scene.add(this.playerPositionMarker);
+    this.scene.add(this.playerPositionMarker); */
 
-    // Initialize debug cubes pool
+    /* // Initialize debug cubes pool
     for (let i = 0; i < this.maxDebugCubes; i++) {
       const cube = new THREE.Mesh(
         new THREE.BoxGeometry(1 + 1e-3, 1 + 1e-3, 1 + 1e-3),
@@ -71,7 +71,7 @@ class Game {
       cube.visible = false;
       this.debugCubes.push(cube);
       this.scene.add(cube);
-    }
+    } */
   }
 
   /**
@@ -112,8 +112,8 @@ class Game {
     this.scene.receiveShadow = true;
     // this.scene.fog = new THREE.FogExp2(0x87ceeb, 0.025); // Fog effect
 
-    // For testing
-    this.scene.add(new THREE.GridHelper(500, 100));
+    // !Testing
+    // this.scene.add(new THREE.GridHelper(500, 100));
 
     /*     // !Testing
     const testObject = new THREE.Mesh(
@@ -194,7 +194,7 @@ class Game {
       }
 
       // !Testing: Update player position marker
-      this.playerPositionMarker.position.copy(this.player.position);
+      // this.playerPositionMarker.position.copy(this.player.position);
     }
 
     // Update orbit controls when not in player view

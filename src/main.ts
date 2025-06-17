@@ -29,5 +29,5 @@ TextureManager.getInstance()
     // Start the game loop
     game.start();
 
-    createGUI(chunk, chunkRenderer);
+    createGUI(chunk, chunkRenderer, game.player);
   });
