@@ -1,7 +1,11 @@
 import type { Player } from '@/Player';
 import * as THREE from 'three';
+import { PointerLockControls } from 'three/examples/jsm/Addons.js';
 
 class PlayerRenderer extends THREE.Group {
+  public readonly camera: THREE.PerspectiveCamera;
+  public readonly controls: PointerLockControls;
+
   private player: Player;
 
   // Helpers
@@ -16,10 +20,21 @@ class PlayerRenderer extends THREE.Group {
 
     this.position.copy(this.player.position);
 
-    this.rotation.copy(this.player.camera.rotation);
+    this.camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight);
 
-    this.cameraHelper = new THREE.CameraHelper(this.player.camera);
-    // this.add(this.cameraHelper);
+    this.camera.position.set(0, this.player.height, 0);
+
+    this.rotation.copy(this.camera.rotation);
+
+    this.cameraHelper = new THREE.CameraHelper(this.camera);
+
+    this.controls = new PointerLockControls(this.camera, document.body);
+
+    document.body.addEventListener('click', () => {
+      this.controls.lock();
+    });
+
+    this.add(this.controls.getObject());
 
     this.createPlayerBody();
   }
@@ -47,7 +62,7 @@ class PlayerRenderer extends THREE.Group {
     this.playerBody = new THREE.Group();
     this.playerBody.add(cylinder);
 
-    this.playerBody.position.set(0, 0, 0);
+    this.playerBody.position.set(0, this.player.height / 2, 0);
     this.add(this.playerBody);
   }
 
@@ -61,7 +76,7 @@ class PlayerRenderer extends THREE.Group {
     if (this.playerBody) {
       // Make the player body face the direction the camera is looking
       const cameraDirection = new THREE.Vector3();
-      this.player.camera.getWorldDirection(cameraDirection);
+      this.camera.getWorldDirection(cameraDirection);
 
       const angle = Math.atan2(cameraDirection.x, cameraDirection.z);
       this.playerBody.rotation.y = angle;

@@ -24,6 +24,8 @@ interface ICollisionDetail {
 }
 
 class Physics {
+  private static COLLISION_EPSILON = 0.005;
+
   public checkCollision(
     playerPosition: THREE.Vector3,
     playerRadius: number,
@@ -58,16 +60,16 @@ class Physics {
   ): IPlayerBoundingBox {
     return {
       x: {
-        min: position.x - radius,
-        max: position.x + radius,
+        min: position.x - radius - Physics.COLLISION_EPSILON,
+        max: position.x + radius + Physics.COLLISION_EPSILON,
       },
       y: {
-        min: position.y - height / 2,
-        max: position.y + height / 2,
+        min: position.y - Physics.COLLISION_EPSILON,
+        max: position.y + height + Physics.COLLISION_EPSILON,
       },
       z: {
-        min: position.z - radius,
-        max: position.z + radius,
+        min: position.z - radius - Physics.COLLISION_EPSILON,
+        max: position.z + radius + Physics.COLLISION_EPSILON,
       },
       position: position.clone(),
     };
@@ -106,7 +108,7 @@ class Physics {
     }
 
     //! Debug
-    console.log('Broad Phase Collision Candidates:', collisionCandidates.length);
+    // console.log('Broad Phase Collision Candidates:', collisionCandidates.length);
 
     return collisionCandidates;
   }
@@ -132,14 +134,14 @@ class Physics {
     }
 
     //! Debug
-    console.log(
+    /*   console.log(
       'Narrow Phase Collisions:',
       collisions.length
       // collisions.map(c => c.block.position),
       // collisions.map(c => c.penetration),
       // collisions.map(c => c.normal),
       // playerBox
-    );
+    ); */
 
     return collisions;
   }

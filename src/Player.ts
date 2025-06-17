@@ -1,12 +1,8 @@
 import * as THREE from 'three';
-import { PointerLockControls } from 'three/examples/jsm/Addons.js';
 import Physics from './Physics';
 import type { Chunk } from './world/Chunk';
 
 export class Player {
-  public readonly camera: THREE.PerspectiveCamera;
-  public readonly controls: PointerLockControls;
-
   // Player properties
   public position: THREE.Vector3;
   private velocity: THREE.Vector3 = new THREE.Vector3(0, 0, 0);
@@ -45,24 +41,17 @@ export class Player {
     this.position = initialPosition.clone();
 
     // Camera at eye level (player position + height)
-    this.camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight);
-    this.camera.position.set(
-      initialPosition.x,
-      initialPosition.y + this.height / 2,
-      initialPosition.z
-    );
+    // this.camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight);
+    // this.camera.position.set(
+    //   initialPosition.x,
+    //   initialPosition.y + this.height / 2,
+    //   initialPosition.z
+    // );
 
     // Initialize Pointer Lock Controls
-    this.controls = new PointerLockControls(this.camera, document.body);
-
-    // Add controls to the scene
-    document.body.addEventListener('click', () => {
-      this.controls.lock();
-    });
+    // this.controls = new PointerLockControls(this.camera, document.body);
 
     this.setupKeyboardControls();
-
-    this.initialize();
   }
 
   private setupKeyboardControls(): void {
@@ -135,14 +124,9 @@ export class Player {
     }
   }
 
-  public update(deltaTime: number, chunk: Chunk): void {
-    if (!this.controls.isLocked) return;
-
+  public update(cameraDirection: THREE.Vector3, deltaTime: number, chunk: Chunk): void {
     //! Update UI
     this.updateUI();
-
-    const cameraDirection = new THREE.Vector3();
-    this.camera.getWorldDirection(cameraDirection);
 
     const cameraRight = new THREE.Vector3()
       .crossVectors(new THREE.Vector3(0, 1, 0), cameraDirection)
@@ -227,7 +211,7 @@ export class Player {
     this.position.y += this.velocity.y * deltaTime; */
 
     // Update camera position to match player position
-    this.camera.position.copy(this.position.clone().add(new THREE.Vector3(0, this.height / 2, 0)));
+    // this.camera.position.copy(this.position.clone().add(new THREE.Vector3(0, this.height / 2, 0)));
   }
 
   public getPosition(): THREE.Vector3 {
@@ -239,12 +223,5 @@ export class Player {
     const { x, y, z } = this.getPosition();
     const positionText = `X: ${x.toFixed(2)}, Y: ${y.toFixed(2)}, Z: ${z.toFixed(2)}`;
     document.querySelector('.player-position')!.textContent = positionText;
-  }
-
-  public initialize(): void {
-    // No need to add controls object to scene, Game class will handle this
-
-    console.log('Player initialized at position:', this.position);
-    console.log('Camera initialized at position:', this.camera.position);
   }
 }

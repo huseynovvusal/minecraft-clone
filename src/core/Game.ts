@@ -53,7 +53,8 @@ class Game {
     this.scene.add(this.playerRenderer);
 
     // Add the player's controls object to the scene
-    this.scene.add(this.player.controls.getObject());
+    // this.scene.add(this.playerRenderer.controls.getObject());
+
     //! Add the player's camera helper to the scene for debugging
     this.scene.add(this.playerRenderer.cameraHelper);
 
@@ -185,40 +186,15 @@ class Game {
     this.stats.begin();
 
     if (this.player) {
-      this.player.update(this.deltaTime, this.chunk);
-      /*   const { collisionCandidates } = this.physics.checkCollision(
-        this.player.position,
-        this.player.radius,
-        this.player.height,
-        this.chunk
-      );
- */
-      /*     //! --- Debug cubes for collision visualization ---
-      for (let i = 0; i < this.maxDebugCubes; i++) {
-        if (i < collisionCandidates.length) {
-          const box = collisionCandidates[i].boundingBox;
-          const p = 0.5;
-          this.debugCubes[i].position.set(box.x.min + p, box.y.min + p, box.z.min + p);
-          this.debugCubes[i].visible = true;
-        } else {
-          this.debugCubes[i].visible = false;
+      const cameraDirection = new THREE.Vector3();
+      this.playerRenderer.camera.getWorldDirection(cameraDirection);
+
+      if (this.playerRenderer.controls.isLocked) {
+        this.player.update(cameraDirection, this.deltaTime, this.chunk);
+
+        if (this.playerRenderer) {
+          this.playerRenderer.update();
         }
-      } */
-
-      // Update player renderer
-      if (this.playerRenderer) {
-        this.playerRenderer.update();
-
-        // !Testing: Log player position and check for blocks
-        // console.log(
-        //   'Is there a block at player position?',
-        //   this.chunk.getBlock(
-        //     Math.floor(this.player.position.x),
-        //     Math.floor(this.player.position.y - this.player.height / 2),
-        //     Math.floor(this.player.position.z)
-        //   ),
-
-        // );
       }
 
       // !Testing: Update player position marker
@@ -226,12 +202,12 @@ class Game {
     }
 
     // Update orbit controls when not in player view
-    if (!this.player.controls.isLocked) {
+    if (!this.playerRenderer.controls.isLocked) {
       this.controls.update();
     }
 
-    if (this.player.controls.isLocked) {
-      this.renderer.render(this.scene, this.player.camera);
+    if (this.playerRenderer.controls.isLocked) {
+      this.renderer.render(this.scene, this.playerRenderer.camera);
     } else {
       this.renderer.render(this.scene, this.camera);
     }
@@ -248,8 +224,8 @@ class Game {
     this.camera.updateProjectionMatrix();
 
     // Update player camera aspect ratio
-    this.player.camera.aspect = window.innerWidth / window.innerHeight;
-    this.player.camera.updateProjectionMatrix();
+    this.playerRenderer.camera.aspect = window.innerWidth / window.innerHeight;
+    this.playerRenderer.camera.updateProjectionMatrix();
 
     this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
