@@ -86,7 +86,7 @@ class ChunkRenderer extends THREE.Group {
   /**
    * Adds wireframe strokes to the chunk for debugging purposes.
    */
-  private _addWireframeStrokes(geometry: THREE.BufferGeometry, positions: THREE.Vector3[]): void {
+  /*  private addWireframeStrokes(geometry: THREE.BufferGeometry, positions: THREE.Vector3[]): void {
     const wireframeMaterial = new THREE.MeshBasicMaterial({
       color: 0x000000,
       wireframe: true,
@@ -103,7 +103,7 @@ class ChunkRenderer extends THREE.Group {
 
     wireframeMesh.instanceMatrix.needsUpdate = true;
     this.add(wireframeMesh);
-  }
+  } */
 }
 
 export { ChunkRenderer };
