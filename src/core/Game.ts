@@ -59,7 +59,7 @@ class Game {
 
     //! Testing: Add an object to identify the player's position
     this.playerPositionMarker = new THREE.Mesh(
-      new THREE.SphereGeometry(0.1, 5, 5),
+      new THREE.SphereGeometry(0.05, 5, 5),
       new THREE.MeshBasicMaterial({ color: 0xff0000 })
     );
     this.playerPositionMarker.position.copy(this.player.position);
@@ -193,7 +193,7 @@ class Game {
         this.chunk
       );
 
-      //! --- Debug cubes for collision visualization ---
+      /*     //! --- Debug cubes for collision visualization ---
       for (let i = 0; i < this.maxDebugCubes; i++) {
         if (i < collisionCandidates.length) {
           const box = collisionCandidates[i].boundingBox;
@@ -203,7 +203,7 @@ class Game {
         } else {
           this.debugCubes[i].visible = false;
         }
-      }
+      } */
 
       // Update player renderer
       if (this.playerRenderer) {
