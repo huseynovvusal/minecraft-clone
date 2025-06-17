@@ -155,6 +155,10 @@ class Physics {
     );
   }
 
+  /**
+   * Calculates the penetration vector between the player bounding box and the block bounding box.
+   * This vector indicates how much the player is penetrating into the block along each axis.
+   */
   private calculatePenetration(
     playerBox: IPlayerBoundingBox,
     blockBox: IBoundingBox
@@ -168,6 +172,9 @@ class Physics {
     return new THREE.Vector3(xOverlap, yOverlap, zOverlap);
   }
 
+  /**
+   * Calculates the collision normal based on the penetration vector.
+   */
   private calculateCollisionNormal(penetration: THREE.Vector3): THREE.Vector3 {
     const normal = new THREE.Vector3();
 
@@ -186,6 +193,9 @@ class Physics {
     return normal;
   }
 
+  /**
+   * Resolves collisions by adjusting the player's position and velocity based on the collision details.
+   */
   public resolveCollisions(
     position: THREE.Vector3,
     velocity: THREE.Vector3,

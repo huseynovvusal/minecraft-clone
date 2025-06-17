@@ -118,7 +118,7 @@ class Game {
     // For testing
     this.scene.add(new THREE.GridHelper(500, 100));
 
-    // !Testing
+    /*     // !Testing
     const testObject = new THREE.Mesh(
       new THREE.BoxGeometry(1, 1, 1),
       new THREE.MeshBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.5 })
@@ -126,7 +126,7 @@ class Game {
 
     testObject.position.set(5, 17, 37);
 
-    this.scene.add(testObject);
+    this.scene.add(testObject); */
   }
 
   /**
