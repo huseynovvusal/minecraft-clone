@@ -23,7 +23,7 @@ chunkRenderer.render();
 //TODO: All these will be handled inside World class
 // For now, we just create a Game instance with the chunk
 // This will also handle the scene, camera, and renderer setup
-const game = new Game(chunk, chunkRenderer);
+const game = new Game(chunk);
 
 game.scene.add(chunkRenderer);
 

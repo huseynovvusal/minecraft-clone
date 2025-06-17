@@ -3,7 +3,6 @@ import * as THREE from 'three';
 import { Chunk } from '@/world/Chunk';
 import { BlockType } from '@/types/block';
 import TextureManager from '@/rendering/TextureManager';
-import { Block } from '@/Block';
 
 class ChunkRenderer extends THREE.Group {
   private chunk: Chunk;
@@ -87,7 +86,7 @@ class ChunkRenderer extends THREE.Group {
   /**
    * Adds wireframe strokes to the chunk for debugging purposes.
    */
-  private addWireframeStrokes(geometry: THREE.BufferGeometry, positions: THREE.Vector3[]): void {
+  private _addWireframeStrokes(geometry: THREE.BufferGeometry, positions: THREE.Vector3[]): void {
     const wireframeMaterial = new THREE.MeshBasicMaterial({
       color: 0x000000,
       wireframe: true,

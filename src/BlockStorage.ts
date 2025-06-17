@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { AirBlock, type Block } from './Block';
 
 class BlockStorage {
@@ -13,7 +14,7 @@ class BlockStorage {
       for (let j = 0; j < this.y; j++) {
         this.block[i][j] = [];
         for (let k = 0; k < this.z; k++) {
-          this.block[i][j][k] = new AirBlock();
+          this.block[i][j][k] = new AirBlock(new THREE.Vector3(i, j, k));
         }
       }
     }
@@ -50,7 +51,7 @@ class BlockStorage {
 
   public deleteBlock(x: number, y: number, z: number): boolean {
     if (this.hasBlock(x, y, z)) {
-      this.block[x][y][z] = new AirBlock();
+      this.block[x][y][z] = new AirBlock(new THREE.Vector3(x, y, z));
       return true;
     }
 

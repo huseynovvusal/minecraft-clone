@@ -1,6 +1,4 @@
-import Physics from '@/Physics';
 import { Player } from '@/Player';
-import { ChunkRenderer } from '@/rendering/ChunkRenderer';
 import PlayerRenderer from '@/rendering/PlayerRenderer';
 import { Chunk } from '@/world/Chunk';
 import * as THREE from 'three';
@@ -25,8 +23,6 @@ class Game {
   private readonly clock = new THREE.Clock();
   private deltaTime: number = 0;
 
-  private readonly physics = new Physics();
-
   //! Testing: Marker to visualize player's position
   private playerPositionMarker: THREE.Mesh;
 
@@ -38,7 +34,7 @@ class Game {
     opacity: 0.5,
   });
 
-  constructor(private readonly chunk: Chunk, private readonly chunkRenderer: ChunkRenderer) {
+  constructor(private readonly chunk: Chunk) {
     this.setupRenderer();
     this.setupCamera();
     this.setupStats();
