@@ -199,8 +199,13 @@ class Physics {
       const correction = new THREE.Vector3();
 
       if (collision.normal.x !== 0) {
-        const direction = Math.sign(newVelocity.x);
-        correction.x = collision.penetration.x * (direction || 1);
+        const playerCenterX = position.x;
+        const blockCenterX = collision.block.position.x;
+
+        const direction = playerCenterX > blockCenterX ? 1 : -1;
+
+        correction.x = collision.penetration.x * direction;
+
         newVelocity.x = 0;
       }
 
@@ -220,8 +225,13 @@ class Physics {
       }
 
       if (collision.normal.z !== 0) {
-        const direction = Math.sign(newVelocity.z);
-        correction.z = collision.penetration.z * (direction || 1);
+        const playerCenterZ = position.z;
+        const blockCenterZ = collision.block.position.z;
+
+        const direction = playerCenterZ > blockCenterZ ? 1 : -1;
+
+        correction.z = collision.penetration.z * direction;
+
         newVelocity.z = 0;
       }
 
