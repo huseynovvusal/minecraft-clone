@@ -7,7 +7,7 @@ import { ChunkRenderer } from './rendering/ChunkRenderer';
 import Game from './core/Game';
 
 // TextureManager initialization
-await TextureManager.getInstance()
+TextureManager.getInstance()
   .loadTextures()
   .then(() => {
     console.log('Textures loaded successfully');
